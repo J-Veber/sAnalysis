@@ -17,17 +17,18 @@ public class Main {
             int i = 0;
             List<String> lines = Files.readAllLines(Paths.get(wayToFile), StandardCharsets.UTF_8);
             ArrayList<DataForSemantAn> dataForSemantAnList = new ArrayList<DataForSemantAn>();
-            TokenParser curObj = new TokenParser();
+
             for(String line: lines){
                 //System.out.println(line);
                 if (line != "") {
+                    TokenParser curObj = new TokenParser();
                     curObj.setTokenName(line.substring(0,21).replaceAll(" ", ""));
                     curObj.setTokenType(line.substring(26,42).replaceAll(" ", ""));
                     curObj.setLine(Integer.parseInt(line.substring(42,44).replaceAll(" ", "")));
                     curObj.setCurrentPosition(Integer.parseInt(line.substring(44,line.length()).replaceAll(" ", "")));
                     //curObj.print();
                     allTokens.add(i, curObj);
-                    //System.out.print(allTokens.get(i).getTokenName());
+                    System.out.print(allTokens.get(i).getTokenName());
                     if (curObj.getTokenType().equals("Variable")){
                         DataForSemantAn obj = new DataForSemantAn();
                         obj.setVarName(curObj.getTokenName());
@@ -35,7 +36,7 @@ public class Main {
                         dataForSemantAnList.add(obj);
                     }
                     i++;
-                    curObj.clearCurrentData();
+                    //curObj.clearCurrentData();
                 }
             }
             //create tree
