@@ -28,7 +28,7 @@ public class Main {
                     curObj.setCurrentPosition(Integer.parseInt(line.substring(44,line.length()).replaceAll(" ", "")));
                     //curObj.print();
                     allTokens.add(i, curObj);
-                    System.out.print(allTokens.get(i).getTokenName());
+                    //System.out.print(allTokens.get(i).getTokenName());
                     if (curObj.getTokenType().equals("Variable")){
                         DataForSemantAn obj = new DataForSemantAn();
                         obj.setVarName(curObj.getTokenName());
