@@ -102,6 +102,8 @@ public class TokenParser {
                         _index++;
                     } else System.out.println("area_var_dec : expected End sign ( ; )");
                     break;
+                default:
+                    break;
             }
         }
         if (inputTokens.get(_index).getTokenName().equals("BEGIN")){
@@ -113,14 +115,28 @@ public class TokenParser {
     }
 
     private void var_dec(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
-        list_ident(_index,inputTokens,_tree); //проверка была выше
-        if (inputTokens.get(_index).getTokenType().equals(":")){
+        //list_ident(_index,inputTokens,_tree); //проверка была выше
+        //_index++;
+        _tree.addLeaf(inputTokens.get(_index-1).getTokenName());
+        ++_index;
+        while (inputTokens.get(_index).getTokenName().equals(",")){
+            if (inputTokens.get(_index + 1).getTokenType().equals("Variable")){
+                _tree.addLeaf(inputTokens.get(_index).getTokenName()); // добавляем запятую
+                _index++;
+                _tree.addLeaf(inputTokens.get(_index).getTokenName()); //добавляем переменную
+                _index++;
+            } else {
+                System.out.println("list_ident : expected Variable");
+                break;
+            }
+        }
+        if (inputTokens.get(_index).getTokenName().equals(":")){
             _tree.addLeaf(inputTokens.get(_index).getTokenName());
             _index++;
             switch (inputTokens.get(_index).getTokenName()){
-                case "INT":
+                case "INTEGER":
                 case "BOOLEAN":
-                case"STRING":
+                case "STRING":
                 case "REAL":
                     _tree.addLeaf(inputTokens.get(_index).getTokenName());
                     _index++;
@@ -128,13 +144,14 @@ public class TokenParser {
                 default:
                     System.out.println("var_dec : expected TYPENAME INT or BOOLEAN or STRING or REAL");
                     break;
-            } System.out.println("var_dec : expected define sign ( : )");
+            } //System.out.println("var_dec : expected define sign ( : )");
         }
     }
 
     private void list_ident(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
-        _tree.addLeaf(inputTokens.get(_index).getTokenName());
-        _index++;
+
+        _tree.addLeaf(inputTokens.get(_index-1).getTokenName());
+        ++_index;
         while (inputTokens.get(_index).getTokenName().equals(",")){
             if (inputTokens.get(_index + 1).getTokenType().equals("Variable")){
                 _tree.addLeaf(inputTokens.get(_index).getTokenName()); // добавляем запятую
