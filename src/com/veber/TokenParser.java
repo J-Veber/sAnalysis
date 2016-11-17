@@ -15,7 +15,7 @@ public class TokenParser {
     private String tokenName;
     private String tokenType;
     private int currentPosition;
-    private static int index; //index for ArrayList<TokenParser> allTokens
+    private static Integer index; //index for ArrayList<TokenParser> allTokens
     private static Tree<String> semantTree;
     private String[] typeMas = {"INTEGER", "BOOLEAN", "STRING", "REAL", "Keyword"};
 
@@ -46,7 +46,7 @@ public class TokenParser {
     }
 
     public static void init(ArrayList<TokenParser> _inputTokens) {
-        index = 0;
+        index = new Integer(0);
         String input_token = _inputTokens.get(index).getTokenName();
         switch (input_token){
             case "PROGRAM":
@@ -66,7 +66,7 @@ public class TokenParser {
         }
     }
 
-    private static void identProg(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree) {
+    private static void identProg(Integer _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree) {
         switch (inputTokens.get(_index).getTokenType()){
             case "Variable":
                 _tree.addLeaf(inputTokens.get(_index).getTokenName());
@@ -85,7 +85,7 @@ public class TokenParser {
         }
     }
 
-    private static void progBlock(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void progBlock(Integer _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         switch (inputTokens.get(_index).getTokenName()){
             case "VAR":
                 area_var_dec(_index, inputTokens, _tree);
@@ -96,7 +96,7 @@ public class TokenParser {
         }
     }
 
-    private static void area_var_dec(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void area_var_dec(Integer _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         _tree.addLeaf(inputTokens.get(_index).getTokenName());
         _index++;
         System.out.println(_tree.printTree(_index));
@@ -124,7 +124,7 @@ public class TokenParser {
 
     }
 
-    private static void var_dec(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void var_dec(Integer _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         //list_ident(_index,inputTokens,_tree); //проверка была выше
         //_index++;
 // ----- list_ident -----
