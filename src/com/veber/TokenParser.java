@@ -2,6 +2,7 @@ package com.veber;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import static javax.swing.UIManager.get;
 
@@ -14,7 +15,9 @@ public class TokenParser {
     private String tokenName;
     private String tokenType;
     private int currentPosition;
-    private int index;
+    private static int index; //index for ArrayList<TokenParser> allTokens
+    private static Tree<String> semantTree;
+    private String[] typeMas = {"INTEGER", "BOOLEAN", "STRING", "REAL", "Keyword"};
 
     public TokenParser(){
         line = -1;
@@ -42,12 +45,13 @@ public class TokenParser {
         System.out.println(tokenName + " ; " + tokenType + " ; " + line + " ; " + currentPosition);
     }
 
-    public void init(ArrayList<TokenParser> _inputTokens) {
+    public static void init(ArrayList<TokenParser> _inputTokens) {
         index = 0;
         String input_token = _inputTokens.get(index).getTokenName();
         switch (input_token){
             case "PROGRAM":
-                Tree<String> semantTree = new Tree<>(_inputTokens.get(index).getTokenName());
+                //Tree<String> semantTree = new Tree<>(_inputTokens.get(index).getTokenName());
+                semantTree = new Tree<>(_inputTokens.get(index).getTokenName());
                 //semantTree.addLeaf(_inputTokens.get(index).getTokenName());
                 index++;
                 //для дальнейших изменений нам нужен
@@ -62,14 +66,16 @@ public class TokenParser {
         }
     }
 
-    private void identProg(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree) {
+    private static void identProg(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree) {
         switch (inputTokens.get(_index).getTokenType()){
             case "Variable":
                 _tree.addLeaf(inputTokens.get(_index).getTokenName());
                 _index++;
+                System.out.println(_tree.printTree(_index));
                 if (inputTokens.get(_index).getTokenType().equals("End")){
                     _tree.addLeaf(inputTokens.get(_index).getTokenName());
                     _index++;
+                    System.out.println(_tree.printTree(_index));
                     progBlock(_index, inputTokens, _tree);
                 } else System.out.println("identProg : expected End sign ( ; )");
                 break;
@@ -79,7 +85,7 @@ public class TokenParser {
         }
     }
 
-    private void progBlock(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void progBlock(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         switch (inputTokens.get(_index).getTokenName()){
             case "VAR":
                 area_var_dec(_index, inputTokens, _tree);
@@ -90,9 +96,12 @@ public class TokenParser {
         }
     }
 
-    private void area_var_dec(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void area_var_dec(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         _tree.addLeaf(inputTokens.get(_index).getTokenName());
         _index++;
+        System.out.println(_tree.printTree(_index));
+        //----- Здесь надо модифицировать while чтобы не было ошибки
+        // ----- если begin'a с проге нет вообще -----
         while (!(inputTokens.get(_index).getTokenName().equals("BEGIN"))){
             switch (inputTokens.get(_index).getTokenType()){
                 case "Variable":
@@ -100,11 +109,12 @@ public class TokenParser {
                     if (inputTokens.get(_index).getTokenType().equals("End")){
                         _tree.addLeaf(inputTokens.get(_index).getTokenName());
                         _index++;
+                        System.out.println(_tree.printTree(_index));
                     } else System.out.println("area_var_dec : expected End sign ( ; )");
                     break;
-                default:
-                    break;
             }
+// ----- костыль -----
+            if (!inputTokens.get(_index).getTokenType().equals("End")) break;
         }
         if (inputTokens.get(_index).getTokenName().equals("BEGIN")){
             area_operators(_index, inputTokens, _tree);
@@ -114,11 +124,13 @@ public class TokenParser {
 
     }
 
-    private void var_dec(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void var_dec(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         //list_ident(_index,inputTokens,_tree); //проверка была выше
         //_index++;
-        _tree.addLeaf(inputTokens.get(_index-1).getTokenName());
-        ++_index;
+// ----- list_ident -----
+        _tree.addLeaf(inputTokens.get(_index).getTokenName());
+        _index++;
+        System.out.println(_tree.printTree(_index));
         while (inputTokens.get(_index).getTokenName().equals(",")){
             if (inputTokens.get(_index + 1).getTokenType().equals("Variable")){
                 _tree.addLeaf(inputTokens.get(_index).getTokenName()); // добавляем запятую
@@ -130,9 +142,11 @@ public class TokenParser {
                 break;
             }
         }
+//----- list_ident -----
         if (inputTokens.get(_index).getTokenName().equals(":")){
             _tree.addLeaf(inputTokens.get(_index).getTokenName());
             _index++;
+            System.out.println(_tree.printTree(_index));
             switch (inputTokens.get(_index).getTokenName()){
                 case "INTEGER":
                 case "BOOLEAN":
@@ -140,6 +154,7 @@ public class TokenParser {
                 case "REAL":
                     _tree.addLeaf(inputTokens.get(_index).getTokenName());
                     _index++;
+                    System.out.println(_tree.printTree(_index));
                     break;
                 default:
                     System.out.println("var_dec : expected TYPENAME INT or BOOLEAN or STRING or REAL");
@@ -148,7 +163,7 @@ public class TokenParser {
         }
     }
 
-    private void list_ident(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void list_ident(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
 
         _tree.addLeaf(inputTokens.get(_index-1).getTokenName());
         ++_index;
@@ -165,7 +180,7 @@ public class TokenParser {
         }
     }
 
-    private void area_operators(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void area_operators(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
 //----- проверено наличие BEGIN ------
         _tree.addLeaf(inputTokens.get(_index).getTokenName());
         _index++;
@@ -209,7 +224,7 @@ public class TokenParser {
         }
     }
 
-    private void operator_assign(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void operator_assign(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         _tree.addLeaf(inputTokens.get(_index).getTokenName());
         _index++;
         if (inputTokens.get(_index).getTokenName().equals(":=")) {
@@ -243,7 +258,7 @@ public class TokenParser {
         } else System.out.println("operator_assign : expected assign sign ( := )");
     }
 
-    private void expression (int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void expression (int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         simple_expression(_index, inputTokens, _tree);
         if (inputTokens.get(_index).getTokenType().equals("Relation")) {
             _tree.addLeaf(inputTokens.get(_index).getTokenName());
@@ -262,7 +277,7 @@ public class TokenParser {
         } //-----END WHILE -----
     }
 
-    private void simple_expression(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void simple_expression(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         String token_name = inputTokens.get(_index).getTokenName();
         String token_type = inputTokens.get(_index).getTokenType();
         if (token_type.equals("Operation")) { // -----else go to TERM -----
@@ -293,7 +308,7 @@ public class TokenParser {
         } //-----END WHILE -----
     }
 
-    private void term (int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void term (int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         String token_name = inputTokens.get(_index).getTokenName();
         String token_type = inputTokens.get(_index).getTokenType();
         if (token_type.equals("Variable") ||
@@ -320,7 +335,7 @@ public class TokenParser {
         }
     }
 
-    private void mult(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void mult(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         String token_name = inputTokens.get(_index).getTokenName();
         String token_type = inputTokens.get(_index).getTokenType();
         switch (token_type){
@@ -339,7 +354,7 @@ public class TokenParser {
         }
     }
 
-    private void operator_IF(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void operator_IF(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         _tree.addLeaf(inputTokens.get(_index).getTokenName());
         _index++;
         String token_name = inputTokens.get(_index).getTokenName();
@@ -456,7 +471,7 @@ public class TokenParser {
 
     }
 
-    private void operator_WHILE(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void operator_WHILE(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
 //----- проверено наличие WHILE ------
         _tree.addLeaf(inputTokens.get(_index).getTokenName());
         _index++;
@@ -521,7 +536,7 @@ public class TokenParser {
                 "Real|String|Brackets. ");
     }
 
-    private void operator_FOR(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
+    private static void operator_FOR(int _index, ArrayList<TokenParser> inputTokens, Tree<String> _tree){
 //----- проверено наличие FOR ------
         _tree.addLeaf(inputTokens.get(_index).getTokenName());
         _index++;
@@ -587,5 +602,10 @@ public class TokenParser {
             }
         } else System.out.println("operator_FOR : can not build operator FOR");
     }
+
+    //-----Semantic Analyze ----
+    public void analyze_tree(ArrayList<DataForSemantAn> _inputArrayList) {
+        _inputArrayList.get(0).setVarType(typeMas[4]); //keyword
+            }
 }
 

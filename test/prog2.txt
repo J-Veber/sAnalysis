@@ -1,0 +1,17 @@
+PROGRAM MMM;
+VAR i:INTEGER;
+if N == 5 THEN4:=1         
+BEGIN
+              
+x:=1,5;
+END;
+ELSE
+  BEGIN
+  i:=0;
+  WHILE i<=x DO
+  BEGIN
+  
+    i := i+1;
+  END;
+ 
+END.

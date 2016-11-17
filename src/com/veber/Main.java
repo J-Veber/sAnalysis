@@ -10,11 +10,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String wayToFile = "C:\\Users\\Veiber\\IdeaProjects\\sAnalysis\\test\\ListLexem2.txt";
+        String wayToFile = "C:\\Users\\Veiber\\IdeaProjects\\sAnalysis\\test\\ListLexem4.txt";
         try (FileInputStream fin = new FileInputStream(wayToFile)){
 
             ArrayList<TokenParser> allTokens = new ArrayList<TokenParser>();
             int i = 0;
+            int q = 0;
             List<String> lines = Files.readAllLines(Paths.get(wayToFile), StandardCharsets.UTF_8);
             ArrayList<DataForSemantAn> dataForSemantAnList = new ArrayList<DataForSemantAn>();
 
@@ -28,21 +29,28 @@ public class Main {
                     curObj.setCurrentPosition(Integer.parseInt(line.substring(44,line.length()).replaceAll(" ", "")));
                     //curObj.print();
                     allTokens.add(i, curObj);
-                    //System.out.print(allTokens.get(i).getTokenName());
+
                     if (curObj.getTokenType().equals("Variable")){
                         DataForSemantAn obj = new DataForSemantAn();
                         obj.setVarName(curObj.getTokenName());
                         //obj.print();
-                        dataForSemantAnList.add(obj);
+
+                        dataForSemantAnList.add(q, obj);
+                        System.out.println(dataForSemantAnList.get(q).getVarName() + " " +
+                                dataForSemantAnList.get(q).getVarType()
+                                + " " +
+                                dataForSemantAnList.get(q).getDeclaration().toString() + " " +
+                                dataForSemantAnList.get(q).getInitialization().toString());
+                                q++;
                     }
                     i++;
-                    //curObj.clearCurrentData();
                 }
             }
-            //create tree
+//create tree ans syntax parse Julia's lexems
             TokenParser Pascal = new TokenParser();
             Pascal.init(allTokens);
-
+//Semantic analyse
+            Pascal.analyze_tree(dataForSemantAnList);
 
         } catch (IOException ex) { System.out.println(ex.getMessage()); }
 

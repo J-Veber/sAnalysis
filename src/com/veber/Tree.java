@@ -3,6 +3,7 @@ package com.veber;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by Veiber on 23.10.2016.
@@ -12,6 +13,7 @@ public class Tree<T> {
     private ArrayList<Tree<T>> leafs = new ArrayList<Tree<T>>();
     private Tree<T> parent = null;
     private HashMap<T, Tree<T>> locate = new HashMap<T, Tree<T>>();
+
 
     public Tree(T head) {
         this.head = head;
@@ -91,7 +93,7 @@ public class Tree<T> {
 
     private static final int indent = 2;
 
-    private String printTree(int increment) {
+    public String printTree(int increment) {
         String s = "";
         String inc = "";
         for (int i = 0; i < increment; ++i) {
@@ -103,5 +105,11 @@ public class Tree<T> {
         }
         return s;
     }
+//    private Boolean search_in_tree(T inputString){
+//        Collection<T> search = getSuccessors(inputString);
+//        while (search.size() != 0)
+//        if (search.size() != 0) return true;
+//        else return false;
+//    }
 
 }

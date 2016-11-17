@@ -1,0 +1,10 @@
+PROGRAM PRIMER1;
+VAR s1,s2:STRING;
+	i:INTEGER;
+BEGIN
+	FOR i:=0 TO 4
+		BEGIN
+			s2:=s2+s1;
+		END;
+	IF i==4 THEN s1:="";
+END.
