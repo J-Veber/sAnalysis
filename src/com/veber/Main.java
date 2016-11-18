@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String wayToFile = "C:\\Users\\Veiber\\IdeaProjects\\sAnalysis\\test\\emptyfile.txt";
+        String wayToFile = "C:\\Users\\Veiber\\IdeaProjects\\sAnalysis\\test\\ListLexem4.txt";
         try (FileInputStream fin = new FileInputStream(wayToFile)){
 
             ArrayList<TokenParser> allTokens = new ArrayList<TokenParser>();

@@ -19,6 +19,7 @@ i                    TYPE_Variable        5 5
 0                    TYPE_Integer         5 8
 TO                   TYPE_Keyword         5 10
 4                    TYPE_Integer         5 13
+DO                   TYPE_Keyword         5 10
 BEGIN                TYPE_Keyword         6 1
 s2                   TYPE_Variable        7 1
 :=                   TYPE_Assignment      7 3
@@ -38,4 +39,4 @@ s1                   TYPE_Variable        9 14
 :=                   TYPE_Assignment      9 16
 ""                   TYPE_String          9 18
 ;                    TYPE_End             9 20
-END                  TYPE_END.            10 1
+END.                 TYPE_END.            10 1
