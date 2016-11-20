@@ -111,5 +111,48 @@ public class Tree<T> {
 //        if (search.size() != 0) return true;
 //        else return false;
 //    }
+    public void sem_analyse(Tree<String> _tree, ArrayList<DataForSemantAn> _inputArrayList) {
+        int counter_for_inputArraylist = 0;
+        for (String child : _tree.getSuccessors("PROGRAM")) {
+            //int counter_for_inputArraylist = 1;
+            if (counter_for_inputArraylist == 0) {
+                _inputArrayList.get(counter_for_inputArraylist).setVarType("Keyword");
+                counter_for_inputArraylist++;
+            } else {
+                //-----add datatypes for all variable ------
+                String[] mas_for_var = new String[15];
+                int i = 0;
+                if (!child.equals("BEGIN")){
+                    mas_for_var[i] = child;
+                    i++;
+                } else { //----- if met DATATYPE we should assign mas_for_var
+                    for (int q = 0; q<i; q++) {
+                        switch (child){
+                            case "STRING":
+                                _inputArrayList.get(counter_for_inputArraylist).setVarType("String");
+                                counter_for_inputArraylist++;
+                                break;
+                            case "INTEGER":
+                                _inputArrayList.get(counter_for_inputArraylist).setVarType("Integer");
+                                counter_for_inputArraylist++;
+                                break;
+                            case "BOOLEAN":
+                                _inputArrayList.get(counter_for_inputArraylist).setVarType("Boolean");
+                                counter_for_inputArraylist++;
+                                break;
+                            case "REAL":
+                                _inputArrayList.get(counter_for_inputArraylist).setVarType("Real");
+                                counter_for_inputArraylist++;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    i = 0;
+                }
+            }
 
+
+        }
+    }
 }

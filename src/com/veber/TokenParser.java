@@ -58,8 +58,9 @@ public class TokenParser {
                 identProg(_inputTokens, semantTree);
                 break;
             default:
-                System.out.println("init: expected keyword PROGRAM");
-                break;
+                System.out.println("init: expected keyword PROGRAM in line - " +
+                        _inputTokens.get(index).getLine());
+                return;
         }
     }
 
@@ -74,11 +75,13 @@ public class TokenParser {
                     index++;
                     System.out.println(_tree.printTree(index));
                     progBlock(inputTokens, _tree);
-                } else System.out.println("identProg : expected End sign ( ; )");
+                } else System.out.println("identProg : expected End sign ( ; ) in line - " +
+                        inputTokens.get(index).getLine());
                 break;
             default:
-                System.out.println("identProg : expected variable");
-                break;
+                System.out.println("identProg : expected variable in line - " +
+                        inputTokens.get(index).getLine());
+                return;
         }
     }
 
@@ -88,8 +91,9 @@ public class TokenParser {
                 area_var_dec(inputTokens, _tree);
                 break;
             default:
-                System.out.println("progBlock: expected VAR");
-                break;
+                System.out.println("progBlock: expected VAR in line - " +
+                        inputTokens.get(index).getLine());
+                return;
         }
     }
 
@@ -106,7 +110,8 @@ public class TokenParser {
                     _tree.addLeaf(inputTokens.get(index).getTokenName());
                     index++;
                     System.out.println(_tree.printTree(index));
-                } else System.out.println("area_var_dec : expected End sign ( ; )");
+                } else System.out.println("area_var_dec : expected End sign ( ; ) in line - " +
+                        inputTokens.get(index).getLine());
             }
 // ----- костыль -----
             //if (!inputTokens.get(index).getTokenType().equals("End")) break;
@@ -114,7 +119,8 @@ public class TokenParser {
         if (inputTokens.get(index).getTokenName().equals("BEGIN")){
             area_operators(inputTokens, _tree);
         } else {
-            System.out.println("area_var_dec : expected BEGIN");
+            System.out.println("area_var_dec : expected BEGIN in line - " +
+                    inputTokens.get(index).getLine());
         }
 
     }
@@ -135,9 +141,10 @@ public class TokenParser {
                     System.out.println(_tree.printTree(index));
                     break;
                 default:
-                    System.out.println("var_dec : expected TYPENAME INT or BOOLEAN or STRING or REAL");
-                    break;
-            } //System.out.println("var_dec : expected define sign ( : )");
+                    System.out.println("var_dec : expected TYPENAME INT or BOOLEAN or STRING or REAL in line - " +
+                            inputTokens.get(index).getLine());
+                    return;
+            }
         }
     }
 
@@ -153,8 +160,9 @@ public class TokenParser {
                 _tree.addLeaf(inputTokens.get(index).getTokenName()); //добавляем переменную
                 index++;
             } else {
-                System.out.println("list_ident : expected Variable");
-                break;
+                System.out.println("list_ident : expected Variable in line - " +
+                        inputTokens.get(index).getLine());
+                return;
             }
         }
     }
@@ -172,7 +180,8 @@ public class TokenParser {
                         _tree.addLeaf(inputTokens.get(index).getTokenName());
                         index++;
                         System.out.println(_tree.printTree(index));
-                    } else System.out.println("area_operators : expected ( ; )");
+                    } else System.out.println("area_operators : expected ( ; ) in line - " +
+                            inputTokens.get(index).getLine());
                     break;
 //-----здесь разбираемся с тем какое именно слово к нам попало -----
                 case "Keyword":
@@ -190,45 +199,41 @@ public class TokenParser {
                             operator_END(inputTokens, _tree);
                             break;
                         default:
-                            System.out.println("area_operators : expected some KEYWORD");
-                            break;
+                            System.out.println("area_operators : expected some KEYWORD in line - " +
+                                    inputTokens.get(index).getLine());
+                            return;
                     }
                     break;
-//                case "END.":
-//                    operator_EXIT(inputTokens, _tree);
-////                        //-----нужно отследить ";" и понять что это конец команды -----
-//                    break;
-//                default:
-//                    System.out.println("area_operators : expected Variable or END. or Keyword type");
-//                    break;
+                default:
+                    System.out.println("area_operators : expected Variable in line - " +
+                            inputTokens.get(index).getLine());
+                    return;
             }
         }
         switch (inputTokens.get(index).getTokenType()){
             case "END.":
                 operator_EXIT(inputTokens, _tree);
-//                        //-----нужно отследить ";" и понять что это конец команды -----
                 break;
             default:
                 System.out.println("area_operators : expected END. in line - " +
                                         inputTokens.get(index).getLine());
-                break;
+                return;
         }
-
-//        if (!(inputTokens.get(index).getTokenType().equals("Variable") &&
-//                inputTokens.get(index+1).getTokenType().equals("Keyword"))) {
-//            System.out.println("area_operators : expected Variable or END. or Keyword type");
-//        }
     }
 
     private static void operator_END(ArrayList<TokenParser> inputTokens, Tree<String> _tree) {
-        if (inputTokens.get(index).getTokenName().equals("END") &&
-                inputTokens.get(index+1).getTokenName().equals(";")) {
+        if (inputTokens.get(index+1).getTokenName().equals(";") &&
+                inputTokens.get(index).getTokenName().equals("END")) {
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
             System.out.println(_tree.printTree(index));
-        } else System.out.println("operator_END : expected END statement in line - " +
+        } else if (inputTokens.get(index).getTokenName().equals(";")) {
+            _tree.addLeaf(inputTokens.get(index).getTokenName());
+            index++;
+            System.out.println(_tree.printTree(index));
+            } else System.out.println("operator_END : expected END statement in line - " +
                                         inputTokens.get(index).getLine());
     }
 
@@ -237,7 +242,8 @@ public class TokenParser {
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
             System.out.println(_tree.printTree(index));
-        } else System.out.println("operator_END : expected END.");
+        } else System.out.println("operator_END : expected END. in line - " +
+                inputTokens.get(index).getLine());
     }
 
     private static void operator_assign(ArrayList<TokenParser> inputTokens, Tree<String> _tree){
@@ -273,7 +279,7 @@ public class TokenParser {
                 default:
                     System.out.println("operator_assign : expected some expression sign in line - " +
                                             inputTokens.get(index).getLine());
-                    break;
+                    return;
             }
         } else System.out.println("operator_assign : expected assign sign ( := ) in line - " +
                                         inputTokens.get(index).getLine());
@@ -281,22 +287,20 @@ public class TokenParser {
 
     private static void expression (ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         simple_expression(inputTokens, _tree);
-        if (inputTokens.get(index).getTokenType().equals("Relation")) {
+        if (inputTokens.get(index).getTokenType().equals("Relation")){
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
-            System.out.println(_tree.printTree(index));
         }
-        //String cur_symb = inputTokens.get(_index).getTokenName();
         while (inputTokens.get(index).getTokenType().equals("Operation") ||
-                inputTokens.get(index).getTokenType().equals("Variable") ||
-                inputTokens.get(index).getTokenType().equals("Integer") ||
-                inputTokens.get(index).getTokenType().equals("Real") ||
-                inputTokens.get(index).getTokenName().equals("TRUE") ||
-                inputTokens.get(index).getTokenName().equals("FALSE") ||
-                inputTokens.get(index).getTokenType().equals("String") ||
-                inputTokens.get(index).getTokenName().equals("(")) {
-            simple_expression(inputTokens, _tree);
-        } //-----END WHILE -----
+                    inputTokens.get(index).getTokenType().equals("Variable") ||
+                    inputTokens.get(index).getTokenType().equals("Integer") ||
+                    inputTokens.get(index).getTokenType().equals("Real") ||
+                    inputTokens.get(index).getTokenName().equals("TRUE") ||
+                    inputTokens.get(index).getTokenName().equals("FALSE") ||
+                    inputTokens.get(index).getTokenType().equals("String") ||
+                    inputTokens.get(index).getTokenName().equals("(")) {
+                simple_expression(inputTokens, _tree);
+            }
     }
 
     private static void simple_expression(ArrayList<TokenParser> inputTokens, Tree<String> _tree){
@@ -315,9 +319,10 @@ public class TokenParser {
                 token_type.equals("String") ||
                 token_name.equals("(") ||
                 token_name.equals("TRUE") || token_name.equals("FALSE")) {
+                //----- TERM -----
                 term(inputTokens, _tree);
             } else System.out.println("simple_expression : expected some Operation symb or Boolean|Variable|Integer|" +
-                    "Real|String|Brackets. ");
+                    "Real|String|Brackets in line - " + inputTokens.get(index).getLine());
         while ((token_name.equals("+") || token_name.equals("-")) &&
                 (inputTokens.get(index + 1).getTokenType().equals("Variable") ||
                         inputTokens.get(index + 1).getTokenType().equals("Integer") ||
@@ -347,7 +352,7 @@ public class TokenParser {
             token_name = inputTokens.get(index).getTokenName();
             token_type = inputTokens.get(index).getTokenType();
         } else System.out.println("term : expected some Operation symb or Boolean|Variable|Integer|" +
-                "Real|String|Brackets. ");
+                "Real|String|Brackets in line - " + inputTokens.get(index).getLine());
         while ((token_name.equals("*") || token_name.equals("AND")) &&
                 (inputTokens.get(index + 1).getTokenType().equals("Variable") ||
                         inputTokens.get(index + 1).getTokenType().equals("Integer") ||
@@ -375,32 +380,31 @@ public class TokenParser {
                 _tree.addLeaf(inputTokens.get(index).getTokenName());
                 index++;
                 System.out.println(_tree.printTree(index));
-                if (inputTokens.get(index).getTokenName().equals(";") ||
-                        inputTokens.get(index).getTokenName().equals("=")){
-                    switch (inputTokens.get(index).getTokenName()){
-                        case ";":
-                            _tree.addLeaf(inputTokens.get(index).getTokenName());
-                            index++;
-                            System.out.println(_tree.printTree(index));
-                            break;
-                        case "=":
-                            if (inputTokens.get(index+1).getTokenName().equals("=")) {
-                                String rel = inputTokens.get(index).getTokenName() +
-                                        inputTokens.get(index+1).getTokenName();
-                                _tree.addLeaf(rel);
-                                index++;
-                                index++;
-                                System.out.println(_tree.printTree(index));
-                                break;
-                            }
-                    }
-
-                } else System.out.println("mult : expected ; or == in line - " + inputTokens.get(index).getLine());
                 break;
             default:
+                switch (token_name) {
+                    case ";":
+                        _tree.addLeaf(inputTokens.get(index).getTokenName());
+                        index++;
+                        System.out.println(_tree.printTree(index));
+                        token_name = inputTokens.get(index).getTokenName();
+                        token_type = inputTokens.get(index).getTokenType();
+                        break;
+                    case "=":
+//                            if (inputTokens.get(index+1).getTokenName().equals("=")) {
+//                                String rel = inputTokens.get(index).getTokenName() +
+//                                        inputTokens.get(index+1).getTokenName();
+//                                _tree.addLeaf(rel);
+//                                index++;
+//                                index++;
+//                                System.out.println(_tree.printTree(index));
+//                                break;
+                        System.out.println("mult  : expected variable in line - " +
+                                inputTokens.get(index).getLine()); //проверить переменную ли ждет
+                }
                 if (token_name.equals("(")) {
                     expression(inputTokens, _tree);
-                } else System.out.println("mult : expected expression");
+                } else System.out.println("mult : expected expression in line - " + inputTokens.get(index).getLine());
                 break;
         }
     }
@@ -422,8 +426,9 @@ public class TokenParser {
             default:
                 if (token_name.equals("(")) {
                     expression(inputTokens, _tree);
-                } else System.out.println("operator_IF : expected expression");
-                break;
+                } else System.out.println("operator_IF : expected expression in line - " +
+                        inputTokens.get(index).getLine());
+                return;
         }
         token_name = inputTokens.get(index).getTokenName();
 // ----- if THEN here or BEGIN or some VARIABLE
@@ -444,7 +449,8 @@ public class TokenParser {
                         if (inputTokens.get(index).getTokenType().equals("End")) {
                             _tree.addLeaf(inputTokens.get(index).getTokenName());
                             index++;
-                        } else System.out.println("operator_IF : expected ( ; )");
+                        } else System.out.println("operator_IF : expected ( ; ) in line - " +
+                                inputTokens.get(index).getLine());
                         break;
 //-----здесь разбираемся с тем какое именно слово к нам попало -----
                     case "Keyword":
@@ -459,13 +465,15 @@ public class TokenParser {
                                 operator_FOR(inputTokens, _tree);
                                 break;
                             default:
-                                System.out.println("operator_IF : expected some KEYWORD");
+                                System.out.println("operator_IF : expected some KEYWORD in line - " +
+                                        inputTokens.get(index).getLine());
                                 break;
                         }
                         break;
                     default:
-                        System.out.println("operator_IF : expected Variable or END. or Keyword type");
-                        break;
+                        System.out.println("operator_IF : expected Variable or END. or Keyword type in line - " +
+                                inputTokens.get(index).getLine());
+                        return;
                 }
             }
             token_name = inputTokens.get(index).getTokenName();
@@ -491,7 +499,8 @@ public class TokenParser {
                                 if (inputTokens.get(index).getTokenType().equals("End")) {
                                     _tree.addLeaf(inputTokens.get(index).getTokenName());
                                     index++;
-                                } else System.out.println("operator_IF : expected ( ; )");
+                                } else System.out.println("operator_IF : expected ( ; ) in line - " +
+                                        inputTokens.get(index).getLine());
                                 break;
 //-----здесь разбираемся с тем какое именно слово к нам попало -----
                             case "Keyword":
@@ -506,21 +515,30 @@ public class TokenParser {
                                         operator_FOR(inputTokens, _tree);
                                         break;
                                     default:
-                                        System.out.println("operator_IF : expected some KEYWORD");
+                                        System.out.println("operator_IF : expected some KEYWORD in line - " +
+                                                inputTokens.get(index).getLine());
                                         break;
                                 }
                                 break;
                             default:
-                                System.out.println("operator_IF : expected Variable or END. or Keyword type");
-                                break;
+                                System.out.println("operator_IF : expected Variable or END. or Keyword type in line - "
+                                        + inputTokens.get(index).getLine());
+                                return;
                         }
                     }
                 }
             }
-        } else if (token_name.equals("THEN")) {
-            System.out.println("operator_IF : expected some operator(s)");
-        } else System.out.println("operator_IF : expected THEN");
+        }  else {
+            switch (token_name){
+                case "THEN":
+                    System.out.println("operator_IF : expected some operator(s) in line - " +
+                    inputTokens.get(index).getLine());
+                    break;
+                default:
+                    return;
 
+            }
+        }
     }
 
     private static void operator_WHILE(ArrayList<TokenParser> inputTokens, Tree<String> _tree){
@@ -563,7 +581,8 @@ public class TokenParser {
                                 _tree.addLeaf(inputTokens.get(index).getTokenName());
                                 index++;
                                 System.out.println(_tree.printTree(index));
-                            } else System.out.println("operator_WHILE : expected ( ; )");
+                            } else System.out.println("operator_WHILE : expected ( ; ) in line - " +
+                                    inputTokens.get(index).getLine());
                             break;
 //-----здесь разбираемся с тем какое именно слово к нам попало -----
                         case "Keyword":
@@ -581,7 +600,8 @@ public class TokenParser {
                                     operator_END(inputTokens, _tree);
                                     break;
                                 default:
-                                    System.out.println("operator_WHILE : expected some KEYWORD");
+                                    System.out.println("operator_WHILE : expected some KEYWORD in line - " +
+                                            inputTokens.get(index).getLine());
                                     break;
                             }
                             break;
@@ -590,13 +610,14 @@ public class TokenParser {
 //                        //-----нужно отследить ";" и понять что это конец команды -----
                             break;
                         default:
-                            System.out.println("operator_WHILE : expected Variable or END. or Keyword type");
-                            break;
+                            System.out.println("operator_WHILE : expected Variable or END. or Keyword type in line - " +
+                                    inputTokens.get(index).getLine());
+                            return;
                     }
                 }
             }
         } else System.out.println("operator_WHILE : expected some Operation symb or Boolean|Variable|Integer|" +
-                "Real|String|Brackets. ");
+                "Real|String|Brackets in line - " + inputTokens.get(index).getLine());
     }
 
     private static void operator_FOR(ArrayList<TokenParser> inputTokens, Tree<String> _tree){
@@ -637,9 +658,10 @@ public class TokenParser {
                     switch (token_type){
                         case "Variable":
                             operator_assign(inputTokens, _tree);
-                            if (inputTokens.get(index).getTokenType().equals("Keyword") &&
-                                    inputTokens.get(index).getTokenName().equals("END") &&
-                                    inputTokens.get(index+1).getTokenName().equals(";")) {
+//                            if (inputTokens.get(index).getTokenType().equals("Keyword") &&
+//                                    inputTokens.get(index).getTokenName().equals("END") &&
+//                                    inputTokens.get(index+1).getTokenName().equals(";")) {
+                            if (inputTokens.get(index).getTokenName().equals(";")) {
                                 operator_END(inputTokens, _tree);
                             } else System.out.println("operator_FOR : expected ( ; ) in line - " +
                                                         inputTokens.get(index).getLine());
@@ -679,7 +701,8 @@ public class TokenParser {
 
     //-----Semantic Analyze ----
     public void analyze_tree(ArrayList<DataForSemantAn> _inputArrayList) {
-        _inputArrayList.get(0).setVarType(typeMas[4]); //keyword
+        //_inputArrayList.get(0).setVarType(typeMas[4]); //keyword
+        semantTree.sem_analyse(semantTree, _inputArrayList);
             }
 }
 
