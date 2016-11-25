@@ -16,16 +16,10 @@ public class TokenParser {
     private String tokenType;
     private int currentPosition;
     private static int index; //index for ArrayList<TokenParser> allTokens
-    private static Tree<String> semantTree;
-    private String[] typeMas = {"INTEGER", "BOOLEAN", "STRING", "REAL", "Keyword"};
+    //private static Tree<String> semantTree;
+
 
     public TokenParser(){
-        line = -1;
-        currentPosition = -1;
-        tokenName = "";
-        tokenType = "";
-    }
-    public void clearCurrentData(){
         line = -1;
         currentPosition = -1;
         tokenName = "";
@@ -45,11 +39,11 @@ public class TokenParser {
         System.out.println(tokenName + " ; " + tokenType + " ; " + line + " ; " + currentPosition);
     }
 
-    public static void init(ArrayList<TokenParser> _inputTokens) {
+    public static void init(Tree<String> semantTree, ArrayList<TokenParser> _inputTokens) {
         String input_token = _inputTokens.get(index).getTokenName();
         switch (input_token){
             case "PROGRAM":
-                semantTree = new Tree<>(_inputTokens.get(index).getTokenName());
+                //semantTree = new Tree<>(_inputTokens.get(index).getTokenName());
                 index++;
                 //для дальнейших изменений нам нужен
                 // список всех токенов,
@@ -698,11 +692,5 @@ public class TokenParser {
             }
         } else System.out.println("operator_FOR : can not build operator FOR");
     }
-
-    //-----Semantic Analyze ----
-    public void analyze_tree(ArrayList<DataForSemantAn> _inputArrayList) {
-        //_inputArrayList.get(0).setVarType(typeMas[4]); //keyword
-        semantTree.sem_analyse(semantTree, _inputArrayList);
-            }
 }
 

@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class Main {
-
+    public static Tree<String> sTree;
     public static void main(String[] args) {
 
         String wayToFile = "C:\\Users\\Veiber\\IdeaProjects\\sAnalysis\\test\\ListLexem4.txt";
@@ -35,6 +35,10 @@ public class Main {
                         if (curObj.getTokenType().equals("Variable")){
                             DataForSemantAn obj = new DataForSemantAn();
                             obj.setVarName(curObj.getTokenName());
+                            obj.setLine(curObj.getLine());
+                            obj.setVarType("Unknown");
+                            obj.setInitialization(false);
+                            obj.setDeclaration(false);
                             //obj.print();
 
                             dataForSemantAnList.add(q, obj);
@@ -50,9 +54,16 @@ public class Main {
                 }
 //create tree ans syntax parse Julia's lexems
                 TokenParser Pascal = new TokenParser();
-                Pascal.init(allTokens);
+                if (allTokens.get(0).getTokenName().equals("PROGRAM")){
+                    sTree = new Tree<>(allTokens.get(0).getTokenName());
+                    Pascal.init(sTree, allTokens);
+                }
+
 //Semantic analyse
-                Pascal.analyze_tree(dataForSemantAnList);
+                int ii = 0;
+                SemanticAnalyser analyser = new SemanticAnalyser();
+                analyser.analyse(dataForSemantAnList, sTree, allTokens);
+                //Pascal.analyze_tree(dataForSemantAnList);
 
             }
 

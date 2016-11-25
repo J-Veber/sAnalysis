@@ -32,7 +32,6 @@ END                  TYPE_Keyword         8 1
 IF                   TYPE_Keyword         9 1
 i                    TYPE_Variable        9 4
 =                    TYPE_Relation        9 5
-=                    TYPE_Relation        9 6
 4                    TYPE_Integer         9 7
 THEN                 TYPE_Keyword         9 9
 s1                   TYPE_Variable        9 14

@@ -20,11 +20,6 @@ public class Tree<T> {
         locate.put(head, this);
     }
 
-    Tree() {
-        throw new UnsupportedOperationException("Not supported yet.");
-        //To change body of generated methods, choose Tools | Templates.
-    }
-
     public void addLeaf(T root, T leaf) {
         if (locate.containsKey(root)) {
             locate.get(root).addLeaf(leaf);
@@ -42,16 +37,6 @@ public class Tree<T> {
         return t;
     }
 
-    public Tree<T> setAsParent(T parentRoot) {
-        Tree<T> t = new Tree<T>(parentRoot);
-        t.leafs.add(this);
-        this.parent = t;
-        t.locate = this.locate;
-        t.locate.put(head, this);
-        t.locate.put(parentRoot, t);
-        return t;
-    }
-
     public T getHead() {
         return head;
     }
@@ -62,6 +47,7 @@ public class Tree<T> {
     public Tree<T> getParent() {
         return parent;
     }
+
     public Collection<T> getSuccessors(T root) {
         Collection<T> successors = new ArrayList<T>();
         Tree<T> tree = getTree(root);
@@ -104,55 +90,5 @@ public class Tree<T> {
             s += "\n" + child.printTree(increment + indent);
         }
         return s;
-    }
-//    private Boolean search_in_tree(T inputString){
-//        Collection<T> search = getSuccessors(inputString);
-//        while (search.size() != 0)
-//        if (search.size() != 0) return true;
-//        else return false;
-//    }
-    public void sem_analyse(Tree<String> _tree, ArrayList<DataForSemantAn> _inputArrayList) {
-        int counter_for_inputArraylist = 0;
-        for (String child : _tree.getSuccessors("PROGRAM")) {
-            //int counter_for_inputArraylist = 1;
-            if (counter_for_inputArraylist == 0) {
-                _inputArrayList.get(counter_for_inputArraylist).setVarType("Keyword");
-                counter_for_inputArraylist++;
-            } else {
-                //-----add datatypes for all variable ------
-                String[] mas_for_var = new String[15];
-                int i = 0;
-                if (!child.equals("BEGIN")){
-                    mas_for_var[i] = child;
-                    i++;
-                } else { //----- if met DATATYPE we should assign mas_for_var
-                    for (int q = 0; q<i; q++) {
-                        switch (child){
-                            case "STRING":
-                                _inputArrayList.get(counter_for_inputArraylist).setVarType("String");
-                                counter_for_inputArraylist++;
-                                break;
-                            case "INTEGER":
-                                _inputArrayList.get(counter_for_inputArraylist).setVarType("Integer");
-                                counter_for_inputArraylist++;
-                                break;
-                            case "BOOLEAN":
-                                _inputArrayList.get(counter_for_inputArraylist).setVarType("Boolean");
-                                counter_for_inputArraylist++;
-                                break;
-                            case "REAL":
-                                _inputArrayList.get(counter_for_inputArraylist).setVarType("Real");
-                                counter_for_inputArraylist++;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    i = 0;
-                }
-            }
-
-
-        }
     }
 }
