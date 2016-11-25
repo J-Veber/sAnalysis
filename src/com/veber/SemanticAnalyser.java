@@ -1,7 +1,6 @@
 package com.veber;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by Veber on 24.11.2016.
@@ -14,7 +13,6 @@ public class SemanticAnalyser {
     public SemanticAnalyser(){
         index = 0;
         variableIndex = 0;
-        //trololo
     }
 
     public void analyse(ArrayList<DataForSemantAn> _variableList,Tree<String> _tree, ArrayList<TokenParser> _allTokens){
