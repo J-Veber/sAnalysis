@@ -14,6 +14,7 @@ public class SemanticAnalyser {
     public SemanticAnalyser(){
         index = 0;
         variableIndex = 0;
+        //trololo
     }
 
     public void analyse(ArrayList<DataForSemantAn> _variableList,Tree<String> _tree, ArrayList<TokenParser> _allTokens){
