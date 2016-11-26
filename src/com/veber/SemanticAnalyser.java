@@ -121,6 +121,32 @@ public class SemanticAnalyser {
                             System.out.println("can not match types " + first + " and " + second + " in operation +");
                         }
                         break;
+                    case "=":
+                        index++;
+                        first = _allTokens.get(index-1).getTokenName();
+                        firstindexinvarmas = search(_variableList, first);
+                        second = _allTokens.get(index+1).getTokenName();
+                        secondindexinvarmas = search(_variableList, second);
+                        if (firstindexinvarmas >= 0 && secondindexinvarmas>= 0) {
+                            first = _variableList.get(firstindexinvarmas).getVarType();
+                            second = _variableList.get(secondindexinvarmas).getVarType();
+                        } else if (secondindexinvarmas <= 0){
+                            first = _variableList.get(firstindexinvarmas).getVarType();
+                            switch (_allTokens.get(index+1).getTokenType()){
+                                case "Real":
+                                    second = "REAL";
+                                    break;
+                                case "Integer":
+                                    second = "INTEGER";
+                                    break;
+                            }
+                        }
+                        if (first.equals(second)){
+
+                        } else {
+                            System.out.println("can not match types " + first + " and " + second + " in operation +");
+                        }
+                        break;
                     case "-":
                     case "*":
                     case "AND":
@@ -146,6 +172,7 @@ public class SemanticAnalyser {
         }
 
     }
+
     private void addVarInMas(String child, int _variableIndex) {
         variableMas[_variableIndex] = child;
     }

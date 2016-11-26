@@ -63,7 +63,6 @@ public class Main {
                 int ii = 0;
                 SemanticAnalyser analyser = new SemanticAnalyser();
                 analyser.analyse(dataForSemantAnList, sTree, allTokens);
-                //Pascal.analyze_tree(dataForSemantAnList);
 
             }
 
