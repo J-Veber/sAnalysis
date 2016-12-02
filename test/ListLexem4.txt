@@ -38,4 +38,9 @@ s1                   TYPE_Variable        9 14
 :=                   TYPE_Assignment      9 16
 ""                   TYPE_String          9 18
 ;                    TYPE_End             9 20
+ELSE                 TYPE_Keyword         9 9
+s1                   TYPE_Variable        9 14
+:=                   TYPE_Assignment      9 16
+""                   TYPE_String          9 18
+;                    TYPE_End             9 20
 END.                 TYPE_END.            10 1
