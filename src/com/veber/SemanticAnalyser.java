@@ -10,12 +10,14 @@ public class SemanticAnalyser {
     private String[] variableMas = new String[150];
     private static int variableIndex; //двигаемся по массиву variableMas
     private static int index; //двигаемся по листьям дерева
+    private static int variablecount = 0;
     public SemanticAnalyser(){
         index = 0;
         variableIndex = 0;
     }
 
-    public void analyse(ArrayList<DataForSemantAn> _variableList,Tree<String> _tree, ArrayList<TokenParser> _allTokens){
+    public void analyse(ArrayList<DataForSemantAn> _variableList,Tree<String> _tree,
+                        ArrayList<TokenParser> _allTokens){
         Boolean Var = true;
         DataForSemantAn obj = new DataForSemantAn();
         for (String child : _tree.getSuccessors(_allTokens.get(index).getTokenName())) {
@@ -79,11 +81,13 @@ public class SemanticAnalyser {
                             _variableList.get(0).setVarType("");
                             _variableList.get(0).setDeclaration(true);
                             _variableList.get(0).setInitialization(true);
+                            variablecount++;
                             index++;
                             index++;
                         } else {
                             addVarInMas(child, variableIndex);
                             variableIndex++;
+                            variablecount++;
                             index++;
                             break;
                         }
@@ -99,7 +103,6 @@ public class SemanticAnalyser {
                                 int indexInVariableMas = search(_variableList, _allTokens.get(index).getTokenName());
                                 if (indexInVariableMas >= 0) {
                                     _variableList.get(indexInVariableMas).setInitialization(true);
-                                    //indexInVariableMas++;
                                     index++;
                                 } else index++;
                                 break;
@@ -170,6 +173,16 @@ public class SemanticAnalyser {
                 }
             }
         }
+        int c = _variableList.size();
+        for (int w = variablecount; w<c; w++){
+            _variableList.remove(variablecount);
+        }
+        c = _variableList.size();
+        for (int w = 0; w<c; w++){
+            System.out.println(_variableList.get(w).getVarName() + " " + _variableList.get(w).getVarType() + " " +
+            _variableList.get(w).getDeclaration() + " " + _variableList.get(w).getInitialization());
+        }
+        //-------analyse variableList -----
 
     }
 
