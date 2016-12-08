@@ -11,6 +11,14 @@ STRING               TYPE_String          2 11
 BEGIN                TYPE_Keyword         4 1
 s1                   TYPE_Variable        9 14
 :=                   TYPE_Assignment      9 16
+(                    TYPE_Brackets        56 4
+(                    TYPE_Brackets        57 4
+""                   TYPE_String          9 18
+)                    TYPE_Comma           56 4
+;                    TYPE_End             9 20
+BEGIN                TYPE_Keyword         19 1
+s1                   TYPE_Variable        9 14
+:=                   TYPE_Assignment      9 16
 ""                   TYPE_String          9 18
 ;                    TYPE_End             9 20
 END.                 TYPE_END.            10 1

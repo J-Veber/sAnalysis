@@ -16,6 +16,8 @@ public class TokenParser {
     private String tokenType;
     private int currentPosition;
     private static int index; //index for ArrayList<TokenParser> allTokens
+    private static int _countBEGINEND;
+    private static int _countBrackets;
 
 
     public TokenParser(){
@@ -23,6 +25,8 @@ public class TokenParser {
         currentPosition = -1;
         tokenName = "";
         tokenType = "";
+        _countBEGINEND = 0;
+        _countBrackets = 0;
     }
 
     public void setTokenName (String input) { tokenName = input; }
@@ -41,7 +45,6 @@ public class TokenParser {
         String input_token = _inputTokens.get(index).getTokenName();
         switch (input_token){
             case "PROGRAM":
-                //semantTree = new Tree<>(_inputTokens.get(index).getTokenName());
                 index++;
                 //для дальнейших изменений нам нужен
                 // список всех токенов,
@@ -115,6 +118,7 @@ public class TokenParser {
             //if (!inputTokens.get(index).getTokenType().equals("End")) break;
         }
         if (inputTokens.get(index).getTokenName().equals("BEGIN")){
+            _countBEGINEND++;
             area_operators(inputTokens, _tree);
         } else {
             System.out.println("area_var_dec : expected BEGIN in line - " +
@@ -184,6 +188,12 @@ public class TokenParser {
                         case "END.":
                             operator_EXIT(inputTokens, _tree);
                             break;
+                        case "Keyword":
+                            if (inputTokens.get(index).getTokenName().equals("BEGIN")){
+                                _countBEGINEND++;
+                                area_operators(inputTokens, _tree);
+                            }
+                            break;
                         default:
                             System.out.println("area_operators : expected ( ; ) in line - " +
                                     inputTokens.get(index).getLine());
@@ -213,6 +223,9 @@ public class TokenParser {
                             System.exit(1);
                     }
                     break;
+                case "END.":
+                    operator_EXIT(inputTokens, _tree);
+                    break;
                 default:
                     System.out.println("area_operators : expected Variable in line - " +
                             inputTokens.get(index).getLine());
@@ -237,10 +250,12 @@ public class TokenParser {
             index++;
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
+            _countBEGINEND--;
             System.out.println(_tree.printTree(index));
         } else if (inputTokens.get(index).getTokenName().equals(";")) {
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
+            _countBEGINEND--; //??????
             System.out.println(_tree.printTree(index));
             } else {
             System.out.println("operator_END : expected END statement in line - " +
@@ -253,13 +268,19 @@ public class TokenParser {
         if (inputTokens.get(index).getTokenType().equals("END.")){
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
+            _countBEGINEND--;
             System.out.println(_tree.printTree(index));
         } else {
             System.out.println("operator_END : expected END. in line - " +
                     inputTokens.get(index).getLine());
             System.exit(1);
         }
-        System.exit(0);
+        if (_countBEGINEND != 0) {
+            System.out.println("operator_EXIT: some problems with BEGIN-END in program");
+            System.exit(1);
+        } else {
+            System.exit(0);
+        }
     }
 
     private static void operator_assign(ArrayList<TokenParser> inputTokens, Tree<String> _tree){
@@ -327,17 +348,6 @@ public class TokenParser {
             index++;
             System.out.println(_tree.printTree(index));
         }
-//        else if (inputTokens.get(index+1).getTokenName().equals("ELSE")) {
-//            System.out.println("operator_assign : unexpected (;) in line - " +
-//                    inputTokens.get(index).getLine());
-//            System.exit(1);
-//
-//        }
-//        else if (inputTokens.get(index+1).getTokenName().equals("ELSE") && !cur_token_name.equals(";")){
-//                System.out.println("operator_assign : expected (;) in line - " +
-//                        inputTokens.get(index).getLine());
-//                System.exit(1);
-//            }
     }
 
     private static void expression (ArrayList<TokenParser> inputTokens, Tree<String> _tree){
@@ -356,6 +366,10 @@ public class TokenParser {
                     inputTokens.get(index).getTokenName().equals("(")) {
                 simple_expression(inputTokens, _tree);
             }
+        if (_countBrackets != 0) {
+            System.out.println("expression : something wrong with brackets in line " + inputTokens.get(index).getLine());
+            System.exit(1);
+        }
     }
 
     private static void simple_expression(ArrayList<TokenParser> inputTokens, Tree<String> _tree){
@@ -444,6 +458,32 @@ public class TokenParser {
                 break;
             default:
                 switch (token_name) {
+                    case "(":
+                        _tree.addLeaf(inputTokens.get(index).getTokenName());
+                        index++;
+                        System.out.println(_tree.printTree(index));
+                        _countBrackets++;
+                        switch (token_type) {
+                            case "Variable":
+                            case "Integer":
+                            case "Real":
+                            case "String":
+                                expression(inputTokens, _tree); //-----вход в правило ВЫРАЖЕНИЕ -----
+                                token_type = inputTokens.get(index).getTokenType();
+                                token_name = inputTokens.get(index).getTokenName();
+                                if (token_name.equals(")")){
+                                    _tree.addLeaf(inputTokens.get(index).getTokenName());
+                                    index++;
+                                    System.out.println(_tree.printTree(index));
+                                    _countBrackets--;
+                                } else {
+                                    System.out.println("mult  : expected close bracket in line - " +
+                                            inputTokens.get(index).getLine());
+                                    System.exit(1);
+                                }
+                                break;
+                        }
+                        break;
                     case ";":
                         _tree.addLeaf(inputTokens.get(index).getTokenName());
                         index++;
@@ -452,24 +492,19 @@ public class TokenParser {
                         token_type = inputTokens.get(index).getTokenType();
                         break;
                     case "=":
-//                            if (inputTokens.get(index+1).getTokenName().equals("=")) {
-//                                String rel = inputTokens.get(index).getTokenName() +
-//                                        inputTokens.get(index+1).getTokenName();
-//                                _tree.addLeaf(rel);
-//                                index++;
-//                                index++;
-//                                System.out.println(_tree.printTree(index));
-//                                break;
                         System.out.println("mult  : expected variable in line - " +
                                 inputTokens.get(index).getLine()); //проверить переменную ли ждет
                         System.exit(1);
+                    default:
+                        System.out.println("mult : expected expression in line - " + inputTokens.get(index).getLine());
+                        System.exit(1);
                 }
-                if (token_name.equals("(")) {
-                    expression(inputTokens, _tree);
-                } else {
-                    System.out.println("mult : expected expression in line - " + inputTokens.get(index).getLine());
-                    System.exit(1);
-                }
+//                if (token_name.equals("(")) {
+//                    expression(inputTokens, _tree);
+//                } else {
+//                    System.out.println("mult : expected expression in line - " + inputTokens.get(index).getLine());
+//                    System.exit(1);
+//                }
                 break;
         }
     }
