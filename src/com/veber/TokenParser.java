@@ -329,6 +329,10 @@ public class TokenParser {
                     _tree.addLeaf(inputTokens.get(index).getTokenName());
                     index++;
                     System.out.println(_tree.printTree(index));
+                    if (_countBrackets != 0) {
+                        System.out.println("expression : something wrong with brackets in line " + inputTokens.get(index).getLine());
+                        System.exit(1);
+                    }
                 } else {
                     System.out.println("operator_assign : unexpected (;) in line - " +
                             inputTokens.get(index).getLine());
@@ -366,10 +370,10 @@ public class TokenParser {
                     inputTokens.get(index).getTokenName().equals("(")) {
                 simple_expression(inputTokens, _tree);
             }
-        if (_countBrackets != 0) {
-            System.out.println("expression : something wrong with brackets in line " + inputTokens.get(index).getLine());
-            System.exit(1);
-        }
+//        if (_countBrackets != 0) {
+//            System.out.println("expression : something wrong with brackets in line " + inputTokens.get(index).getLine());
+//            System.exit(1);
+//        }
     }
 
     private static void simple_expression(ArrayList<TokenParser> inputTokens, Tree<String> _tree){
@@ -395,6 +399,8 @@ public class TokenParser {
                         "Real|String|Brackets in line - " + inputTokens.get(index).getLine());
                 System.exit(1);
             }
+        token_name = inputTokens.get(index).getTokenName();
+        token_type = inputTokens.get(index).getTokenType();
         while ((token_name.equals("+") || token_name.equals("-")) &&
                 (inputTokens.get(index + 1).getTokenType().equals("Variable") ||
                         inputTokens.get(index + 1).getTokenType().equals("Integer") ||
@@ -408,6 +414,8 @@ public class TokenParser {
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
             System.out.println(_tree.printTree(index));
+            token_name = inputTokens.get(index).getTokenName();
+            token_type = inputTokens.get(index).getTokenType();
         } //-----END WHILE -----
     }
 
@@ -463,6 +471,8 @@ public class TokenParser {
                         index++;
                         System.out.println(_tree.printTree(index));
                         _countBrackets++;
+                        token_name = inputTokens.get(index).getTokenName();
+                        token_type = inputTokens.get(index).getTokenType();
                         switch (token_type) {
                             case "Variable":
                             case "Integer":
@@ -652,7 +662,7 @@ public class TokenParser {
 // ----- WHILE добавлен -----
         String token_name = inputTokens.get(index).getTokenName();
         String token_type = inputTokens.get(index).getTokenType();
-        if ((inputTokens.get(index+1).getTokenName().equals("DO")) && (token_type.equals("Variable") ||
+        if ((token_type.equals("Variable") ||
                 token_type.equals("Integer") ||
                 token_type.equals("Real") ||
                 token_type.equals("String") ||
@@ -667,6 +677,9 @@ public class TokenParser {
             token_type = inputTokens.get(index).getTokenType();
 
             if (token_name.equals("BEGIN") || token_type.equals("Variable")) {
+                if (token_name.equals("BEGIN")) {
+                    _countBEGINEND++;
+                }
                 _tree.addLeaf(inputTokens.get(index).getTokenName());
                 index++;
                 System.out.println(_tree.printTree(index));
@@ -674,21 +687,25 @@ public class TokenParser {
                 token_type = inputTokens.get(index).getTokenType();
                 if (token_name.equals("BEGIN")){
 //------составной оператор-----
+                    _countBEGINEND++;
                     area_operators(inputTokens,_tree);
-                } else { // ----- if VARIABLE -----
+                } else {
+                    // ----- if VARIABLE -----
 //-----simple operator -----
                     switch (token_type){
                         case "Variable":
                             operator_assign(inputTokens, _tree);
-                            if (inputTokens.get(index).getTokenType().equals("End")) {
-                                _tree.addLeaf(inputTokens.get(index).getTokenName());
-                                index++;
-                                System.out.println(_tree.printTree(index));
-                            } else {
-                                System.out.println("operator_WHILE : expected ( ; ) in line - " +
-                                    inputTokens.get(index).getLine());
-                                System.exit(1);
-                            }
+//                            if (inputTokens.get(index).getTokenName().equals("END")) {
+//                                _tree.addLeaf(inputTokens.get(index).getTokenName());
+//                                index++;
+//                                _countBEGINEND--;
+//                                System.out.println(_tree.printTree(index));
+//                            }
+//                            else {
+//                                System.out.println("operator_WHILE : expected ( ; ) in line - " +
+//                                    inputTokens.get(index).getLine());
+//                                System.exit(1);
+//                            }
                             break;
 //-----здесь разбираемся с тем какое именно слово к нам попало -----
                         case "Keyword":
@@ -713,7 +730,6 @@ public class TokenParser {
                             break;
                         case "END.":
                             operator_EXIT(inputTokens, _tree);
-//                        //-----нужно отследить ";" и понять что это конец команды -----
                             break;
                         default:
                             System.out.println("operator_WHILE : expected Variable or END. or Keyword type in line - " +

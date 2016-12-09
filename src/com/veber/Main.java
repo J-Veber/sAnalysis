@@ -57,16 +57,15 @@ public class Main {
                 if (allTokens.get(0).getTokenName().equals("PROGRAM")){
                     sTree = new Tree<>(allTokens.get(0).getTokenName());
                     Pascal.init(sTree, allTokens);
+//                    //Semantic analyse
+//                    int ii = 0;
+//                    SemanticAnalyser analyser = new SemanticAnalyser();
+//                    analyser.analyse(dataForSemantAnList, sTree, allTokens);
+                } else {
+                    System.out.println("main: Expected keyword PROGRAM in line 1");
+                    System.exit(1);
                 }
-
-//Semantic analyse
-                int ii = 0;
-                SemanticAnalyser analyser = new SemanticAnalyser();
-                analyser.analyse(dataForSemantAnList, sTree, allTokens);
-
             }
-
         } catch (IOException ex) { System.out.println(ex.getMessage()); }
-
     }
 }
