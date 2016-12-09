@@ -175,7 +175,7 @@ public class TokenParser {
         _tree.addLeaf(inputTokens.get(index).getTokenName());
         index++;
 // ----- BEGIN добавлен -----
-        for (int i = index; i < inputTokens.size(); i++) { // пока не достигли конца проги
+        for (int i = index; index < inputTokens.size()-1; i++) { // пока не достигли конца проги
             switch (inputTokens.get(index).getTokenType()){
                 case "Variable":
                     operator_assign(inputTokens, _tree);
@@ -279,7 +279,8 @@ public class TokenParser {
             System.out.println("operator_EXIT: some problems with BEGIN-END in program");
             System.exit(1);
         } else {
-            System.exit(0);
+            //System.exit(0);
+            return;
         }
     }
 

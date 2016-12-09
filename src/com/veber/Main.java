@@ -58,7 +58,8 @@ public class Main {
                     sTree = new Tree<>(allTokens.get(0).getTokenName());
                     Pascal.init(sTree, allTokens);
 //                    //Semantic analyse
-//                    int ii = 0;
+                    int ii = 0;
+                    System.out.println(sTree.printTree(2));
 //                    SemanticAnalyser analyser = new SemanticAnalyser();
 //                    analyser.analyse(dataForSemantAnList, sTree, allTokens);
                 } else {
@@ -66,6 +67,9 @@ public class Main {
                     System.exit(1);
                 }
             }
-        } catch (IOException ex) { System.out.println(ex.getMessage()); }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+
+        }
     }
 }
