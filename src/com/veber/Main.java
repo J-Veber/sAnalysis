@@ -60,10 +60,13 @@ public class Main {
                 }
 
 //Semantic analyse
-                int ii = 0;
                 SemanticAnalyser analyser = new SemanticAnalyser();
                 analyser.analyse(dataForSemantAnList, sTree, allTokens);
 
+                System.out.println(sTree.toString());
+                System.out.println("-------------------------------------------------------------------------------");
+                Tree tree = Optimizator.optimizator(sTree, dataForSemantAnList);
+                System.out.println(tree.toString());
             }
 
         } catch (IOException ex) { System.out.println(ex.getMessage()); }
