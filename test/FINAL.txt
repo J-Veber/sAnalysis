@@ -44,6 +44,7 @@ i                    TYPE_Variable        16 13
 0                    TYPE_Integer         16 16
 TO                   TYPE_Keyword         16 18
 4                    TYPE_Integer         16 21
+DO                   TYPE_Keyword         16 18
 BEGIN                TYPE_Keyword         17 13
 IF                   TYPE_Keyword         18 17
 i                    TYPE_Variable        18 20
