@@ -10,7 +10,7 @@ public class Main {
     public static Tree<String> sTree;
     public static void main(String[] args) {
 
-        String wayToFile = "C:\\Users\\Veiber\\IdeaProjects\\sAnalysis\\test\\List1.txt";
+        String wayToFile = "C:\\Users\\Veiber\\IdeaProjects\\sAnalysis\\test\\FINAL.txt";
         try (FileInputStream fin = new FileInputStream(wayToFile)){
 
             ArrayList<TokenParser> allTokens = new ArrayList<TokenParser>();
@@ -59,7 +59,7 @@ public class Main {
                     Pascal.init(sTree, allTokens);
 //                    //Semantic analyse
                     int ii = 0;
-                    System.out.println(sTree.printTree(2));
+//                    System.out.println(sTree.printTree(2));
 //                    SemanticAnalyser analyser = new SemanticAnalyser();
 //                    analyser.analyse(dataForSemantAnList, sTree, allTokens);
                 } else {
