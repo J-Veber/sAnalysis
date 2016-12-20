@@ -28,16 +28,31 @@ public class SemanticAnalyser {
             }
         }
     }
-
+    private static void search_double_variable (ArrayList<DataForSemantAn> _variableList,Tree<String> _tree,
+                                                ArrayList<TokenParser> _allTokens) {
+        for (int q = 0; q<_variableList.size(); q++){
+            if (q != _variableList.size() - 1) {
+                for (int a = q + 1; a<_variableList.size()-1; q++){
+                    if (_variableList.get(a).getVarName().equals(_variableList.get(a+1).getVarName())){
+                        System.out.println("search_double_variable : variable " + _variableList.get(a).getVarName() +
+                                " is already exist ");
+                        System.exit(1);
+                    }
+                }
+            }
+        }
+    }
     public void analyse(ArrayList<DataForSemantAn> _variableList,Tree<String> _tree,
                         ArrayList<TokenParser> _allTokens){
         Boolean Var = true;
         DataForSemantAn obj = new DataForSemantAn();
+
         for (String child : _tree.getSuccessors(_allTokens.get(index).getTokenName())) {
             if (Var){
                 switch (child){
                     case "BEGIN":
                         Var = false; //start progblock
+                        index++;
                         break;
                     case "INTEGER":
                         index++;
@@ -107,23 +122,41 @@ public class SemanticAnalyser {
                 }
             } else {
                 //analyse_table(_variableList, _tree, _allTokens);
+                //search_double_variable(_variableList, _tree, _allTokens);
                 switch (child){
                     case ":=":
-                        switch (child){
-                            case "(":
-                                index++;
-                                break;
-                            default:
-                                int indexInVariableMas = search(_variableList, _allTokens.get(index).getTokenName());
-                                if (indexInVariableMas >= 0) {
-                                    _variableList.get(indexInVariableMas).setInitialization(true);
-                                    index++;
-                                } else index++;
-                                break;
+                        //index++;
+                        if (_allTokens.get(index-1).getTokenType().equals("Variable")){
+
+                            int indexInVariableMas = search(_variableList, _allTokens.get(index-1).getTokenName());
+                            String left_part = _variableList.get(indexInVariableMas).getVarType().toUpperCase();
+                            String right_part;
+                            int int_right_part = search(_variableList, _allTokens.get(index+1).getTokenName());
+
+                            if (int_right_part >= 0) {
+                                right_part = _variableList.get(int_right_part).getVarType().toUpperCase();
+                            } else {
+                                right_part = _allTokens.get(index + 1).getTokenType().toUpperCase();
+                                if (right_part.equals("BRACKET")) {
+                                    //index++;
+                                    //continue;
+                                    //break;
+                                }
+                            }
+                            if (!left_part.equals(right_part) && !right_part.equals("BRACKET")) {
+                                System.out.println("can not match types " + left_part + " and " + right_part +
+                                        " in operation " +  child + " in line " + _allTokens.get(index).getLine());
+                                    System.exit(1);
+                            }
+                        } else {
+                            System.out.println("in operation " + child + " " + "in line " + _allTokens.get(index).getLine() + " " +
+                                    _allTokens.get(index-1).getTokenType() + " stay left. ERROR");
+                            System.exit(1);
                         }
+                        index++;
                         break;
                     case "+":
-                        index++;
+                        //index++;
                         String first = _allTokens.get(index-1).getTokenName();
                         int firstindexinvarmas = search(_variableList, first);
                         String second = _allTokens.get(index+1).getTokenName();
@@ -132,25 +165,50 @@ public class SemanticAnalyser {
                         if (firstindexinvarmas >= 0 && secondindexinvarmas>= 0) {
                             first = _variableList.get(firstindexinvarmas).getVarType();
                             second = _variableList.get(secondindexinvarmas).getVarType();
-                        } else if (secondindexinvarmas <= 0){
-                            first = _variableList.get(firstindexinvarmas).getVarType();
-                            switch (_allTokens.get(index+1).getTokenType()){
-                                case "Real":
-                                    second = "REAL";
-                                    break;
-                                case "Integer":
-                                    second = "INTEGER";
-                                    break;
-                                case "String":
-                                    second = "STRING";
-                                    break;
-                            }
                         } else {
-                            System.out.println("can not match types " + first + " and " + second + " in operation "
-                                    + child);
-                            System.exit(1);
+                            if (firstindexinvarmas < 0 && secondindexinvarmas < 0) {
+                                switch (_allTokens.get(index+1).getTokenType()){
+                                    case "Real":
+                                        second = "REAL";
+                                        break;
+                                    case "Integer":
+                                        second = "INTEGER";
+                                        break;
+                                    case "String":
+                                        second = "STRING";
+                                        break;
+                                }
+                                switch (_allTokens.get(index-1).getTokenType()){
+                                    case "Real":
+                                        first = "REAL";
+                                        break;
+                                    case "Integer":
+                                        first = "INTEGER";
+                                        break;
+                                    case "String":
+                                        first = "STRING";
+                                        break;
+                                }
+                            }
+                            if (secondindexinvarmas <= 0 && firstindexinvarmas >=0){
+                                first = _variableList.get(firstindexinvarmas).getVarType();
+                                switch (_allTokens.get(index+1).getTokenType()){
+                                    case "Real":
+                                        second = "REAL";
+                                        break;
+                                    case "Integer":
+                                        second = "INTEGER";
+                                        break;
+                                    case "String":
+                                        second = "STRING";
+                                        break;
+                                }
+                            } else {
+                                System.out.println("can not match types " + first + " and " + second + " in operation "
+                                        + child);
+                                System.exit(1);
+                            }
                         }
-
                         if ((first.equals(second) && !first.equals("Unknown")) && !first.equals("BOOLEAN") ||
                                 (first.equals("REAL") && second.equals("INTEGER")) ||
                                 (first.equals("INTEGER") && second.equals("REAL")) ||
@@ -160,10 +218,11 @@ public class SemanticAnalyser {
                                     + child);
                             System.exit(1);
                         }
+                        index++;
                         break;
                     case "*":
                     case "-":
-                        index++;
+                        //index++;
                         first = _allTokens.get(index-1).getTokenName();
                         firstindexinvarmas = search(_variableList, first);
                         second = _allTokens.get(index+1).getTokenName();
@@ -200,12 +259,47 @@ public class SemanticAnalyser {
                             + child);
                             System.exit(1);
                         }
+                        //index++;
                         break;
                     case "=":
+                    case "<>":
+                        //index++;
+                        first = _allTokens.get(index-1).getTokenName();
+                        firstindexinvarmas = search(_variableList, first);
+                        second = _allTokens.get(index+1).getTokenName();
+                        secondindexinvarmas = search(_variableList, second);
+
+                        if (firstindexinvarmas >= 0 && secondindexinvarmas>= 0) {
+                            first = _variableList.get(firstindexinvarmas).getVarType();
+                            second = _variableList.get(secondindexinvarmas).getVarType();
+                        } else if (secondindexinvarmas <= 0){
+                            first = _variableList.get(firstindexinvarmas).getVarType();
+                            switch (_allTokens.get(index+1).getTokenType()){
+                                case "Real":
+                                    second = "REAL";
+                                    break;
+                                case "Integer":
+                                    second = "INTEGER";
+                                    break;
+                                case "String":
+                                    second = "STRING";
+                                    break;
+                            }
+                        }
+                        if ((first.equals(second) && !first.equals("Unknown")) ||
+                                (first.equals("REAL") && second.equals("INTEGER")) ||
+                                (first.equals("INTEGER") && second.equals("REAL")) ||
+                                (first.equals("STRING") && second.equals("STRING"))){
+                        } else {
+                            System.out.println("can not match types " + first + " and " + second + " in operation " +
+                                    child);
+                            System.exit(1);
+                        }
+                        index++;
+                        break;
                     case "<=":
                     case ">=":
-                    case "!=":
-                        index++;
+                        //index++;
                         first = _allTokens.get(index-1).getTokenName();
                         firstindexinvarmas = search(_variableList, first);
                         second = _allTokens.get(index+1).getTokenName();
@@ -236,10 +330,10 @@ public class SemanticAnalyser {
                                 child);
                             System.exit(1);
                         }
+                        index++;
                         break;
-                    case "AND":
-                    case "OR":
                     case ")":
+                    case "(":
                     case ";":
                     case "END":
                     case "END.":
