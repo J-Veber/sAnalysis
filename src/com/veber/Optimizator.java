@@ -29,6 +29,11 @@ public class Optimizator {
                 newTree.addLeaf("++");
                 //TODO: Achtung!
                 i = i + 4;
+                continue;
+            }
+            if (isDecrement(arrayList, i, item)) {
+                newTree.addLeaf("--");
+                i = i + 4;
             }
         }
         return newTree;
@@ -47,6 +52,20 @@ public class Optimizator {
         if (i + 1 < list.size() && list.get(i + 1).equals(":=")) {
             if (i + 2 < list.size() && list.get(i + 2).equals(s)) {
                 if (i + 3 < list.size() && list.get(i + 3).equals("+")) {
+                    if (i + 4 < list.size() && list.get(i + 4).equals("1")) {
+                        if (i + 5 < list.size() && list.get(i + 5).equals(";")) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    private static boolean isDecrement(ArrayList<String> list, int i, String s) {
+        if (i + 1 < list.size() && list.get(i + 1).equals(":=")) {
+            if (i + 2 < list.size() && list.get(i + 2).equals(s)) {
+                if (i + 3 < list.size() && list.get(i + 3).equals("-")) {
                     if (i + 4 < list.size() && list.get(i + 4).equals("1")) {
                         if (i + 5 < list.size() && list.get(i + 5).equals(";")) {
                             return true;

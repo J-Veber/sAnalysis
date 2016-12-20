@@ -10,7 +10,8 @@ public class Main {
     public static Tree<String> sTree;
     public static void main(String[] args) {
 
-        String wayToFile = "C:\\Users\\Veiber\\IdeaProjects\\sAnalysis\\test\\ListLexem4.txt";
+        //String wayToFile = "C:\\Users\\Veiber\\IdeaProjects\\sAnalysis\\test\\ListLexem4.txt";
+        String wayToFile = "C:\\Users\\Лавр\\Documents\\GitHub\\sAnalysis\\test\\ListLexem4.txt";
         try (FileInputStream fin = new FileInputStream(wayToFile)){
 
             ArrayList<TokenParser> allTokens = new ArrayList<TokenParser>();
