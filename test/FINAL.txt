@@ -21,10 +21,6 @@ i                    TYPE_Variable        5 4
 4                    TYPE_Integer         5 7
 THEN                 TYPE_Keyword         5 9
 BEGIN                TYPE_Keyword         6 4
-x                    TYPE_Variable        8 9
-:=                   TYPE_Assignment      8 10
-1.5                  TYPE_Real            8 12
-;                    TYPE_End             8 15
 END                  TYPE_Keyword         9 5
 ELSE                 TYPE_Keyword         10 1
 BEGIN                TYPE_Keyword         11 3
@@ -35,7 +31,7 @@ i                    TYPE_Variable        13 3
 WHILE                TYPE_Keyword         14 3
 i                    TYPE_Variable        14 9
 <=                   TYPE_Relation        14 10
-x                    TYPE_Variable        14 12
+4                    TYPE_Integer         16 21
 DO                   TYPE_Keyword         14 14
 BEGIN                TYPE_Keyword         15 7
 FOR                  TYPE_Keyword         16 9
@@ -51,11 +47,7 @@ i                    TYPE_Variable        18 20
 =                    TYPE_Relation        18 21
 4                    TYPE_Integer         18 23
 THEN                 TYPE_Keyword         18 25
-BEGIN                TYPE_Keyword         19 21
-u                    TYPE_Variable        21 25
-:=                   TYPE_Assignment      21 26
-1.5                  TYPE_Real            21 28
-;                    TYPE_End             21 31
+BEGIN                TYPE_Keyword         19 13
 s1                   TYPE_Variable        22 25
 :=                   TYPE_Assignment      22 27
 ""                   TYPE_String          22 29
@@ -70,7 +62,6 @@ s1                   TYPE_Variable        24 24
 ;                    TYPE_End             24 26
 i                    TYPE_Variable        25 17
 :=                   TYPE_Assignment      25 19
-(                    TYPE_Bracket         25 22
 (                    TYPE_Bracket         25 23
 14                   TYPE_Integer         25 24
 +                    TYPE_Operation       25 27
@@ -78,7 +69,6 @@ i                    TYPE_Variable        25 17
 )                    TYPE_Bracket         25 36
 +                    TYPE_Operation       25 38
 7                    TYPE_Integer         25 40
-)                    TYPE_Bracket         25 41
 ;                    TYPE_End             25 42
 END                  TYPE_Keyword         26 13
 ;                    TYPE_End             26 16
