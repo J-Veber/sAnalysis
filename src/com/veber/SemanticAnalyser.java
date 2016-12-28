@@ -205,17 +205,17 @@ public class SemanticAnalyser {
                                 }
                             } else {
                                 System.out.println("can not match types " + first + " and " + second + " in operation "
-                                        + child);
+                                        + child + " in line " + _allTokens.get(index).getLine());
                                 System.exit(1);
                             }
                         }
-                        if ((first.equals(second) && !first.equals("Unknown")) && !first.equals("BOOLEAN") ||
-                                (first.equals("REAL") && second.equals("INTEGER")) ||
-                                (first.equals("INTEGER") && second.equals("REAL")) ||
+                        if ((first.equals(second) && !first.equals("Unknown")) && !first.equals("BOOLEAN") &&
+                                (first.equals("REAL") && second.equals("INTEGER")) &&
+                                (first.equals("INTEGER") && second.equals("REAL")) &&
                                 (first.equals(second) && second.equals("STRING"))){
                         } else {
                             System.out.println("can not match types " + first + " and " + second + " in operation "
-                                    + child);
+                                    + child + " in line " + _allTokens.get(index).getLine());
                             System.exit(1);
                         }
                         index++;
@@ -246,20 +246,20 @@ public class SemanticAnalyser {
                             }
                         } else {
                             System.out.println("can not match types " + first + " and " + second + " in operation "
-                                    + child);
+                                    + child + " in line " + _allTokens.get(index).getLine());
                             System.exit(1);
                         }
 
-                        if (first.equals(second) && !first.equals("Unknown") &&
-                                !first.equals("BOOLEAN") && !second.equals("BOOLEAN") &&
-                                !(first.equals("STRING") && !second.equals("STRING")) &&
+                        if (first.equals(second) && !first.equals("Unknown") && !first.equals("STRING") &&
+                                (!first.equals("BOOLEAN") && !second.equals("BOOLEAN")) &&
+                                (!(first.equals("STRING") && !second.equals("STRING"))) &&
                                 !(!first.equals("STRING") && second.equals("STRING"))){
                         } else {
                             System.out.println("can not match types " + first + " and " + second + " in operation "
-                            + child);
+                            + child + " in line " + _allTokens.get(index).getLine());
                             System.exit(1);
                         }
-                        //index++;
+                        index++;
                         break;
                     case "=":
                     case "<>":
