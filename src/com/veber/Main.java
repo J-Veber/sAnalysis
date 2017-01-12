@@ -12,6 +12,7 @@ public class Main {
 
         String wayToFile = "C:\\Users\\Юлия\\Desktop\\ConsoleApplication1\\ConsoleApplication1\\bin\\Release\\ListLexems.txt";
         //String wayToFile = "test\\FINAL.txt";
+
         try (FileInputStream fin = new FileInputStream(wayToFile)){
 
             ArrayList<TokenParser> allTokens = new ArrayList<TokenParser>();
@@ -62,6 +63,11 @@ public class Main {
                     System.out.println(sTree.printTree(2));
                     SemanticAnalyser analyser = new SemanticAnalyser();
                     analyser.analyse(dataForSemantAnList, sTree, allTokens);
+
+                    System.out.println(sTree.toString());
+                    System.out.println("-------------------------------------------------------------------------------");
+                    Tree tree = Optimizator.optimizator(sTree, dataForSemantAnList);
+                    System.out.println(tree.toString());
                 } else {
                     System.out.println("main: Expected keyword PROGRAM in line 1");
                     System.exit(1);

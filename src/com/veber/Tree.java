@@ -48,8 +48,8 @@ public class Tree<T> {
         return parent;
     }
 
-    public Collection<T> getSuccessors(T root) {
-        Collection<T> successors = new ArrayList<T>();
+    public ArrayList<T> getSuccessors(T root) {
+        ArrayList<T> successors = new ArrayList<T>();
         Tree<T> tree = getTree(root);
         if (null != tree) {
             for (Tree<T> leaf : tree.leafs) {

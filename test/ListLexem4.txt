@@ -4,10 +4,12 @@ PRIMER1              TYPE_Variable        1 9
 VAR                  TYPE_Keyword         2 1
 s1                   TYPE_Variable        2 5
 ,                    TYPE_Comma           2 7
-s2                   TYPE_Variable        2 8
-:                    TYPE_Simbol          2 10
-STRING               TYPE_String          2 11
-;                    TYPE_End             2 17
+s3                   TYPE_Variable        2 8
+,                    TYPE_Comma           2 10
+s2                   TYPE_Variable        2 11
+:                    TYPE_Simbol          2 13
+STRING               TYPE_String          2 14
+;                    TYPE_End             2 20
 i                    TYPE_Variable        3 1
 :                    TYPE_Simbol          3 2
 INTEGER              TYPE_INT             3 3
@@ -25,8 +27,8 @@ s2                   TYPE_Variable        7 1
 :=                   TYPE_Assignment      7 3
 s2                   TYPE_Variable        7 5
 +                    TYPE_Operation       7 7
-s1                   TYPE_Variable        7 8
-;                    TYPE_End             7 10
+1                    TYPE_Integer         7 8
+;                    TYPE_End             7 9
 END                  TYPE_Keyword         8 1
 ;                    TYPE_End             8 4
 IF                   TYPE_Keyword         9 1
