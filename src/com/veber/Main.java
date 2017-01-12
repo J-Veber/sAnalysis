@@ -16,6 +16,7 @@ public class Main {
             ArrayList<TokenParser> allTokens = new ArrayList<TokenParser>();
             int i = 0;
             int q = 0;
+
             List<String> lines = Files.readAllLines(Paths.get(wayToFile), StandardCharsets.UTF_8);
             ArrayList<DataForSemantAn> dataForSemantAnList = new ArrayList<DataForSemantAn>();
             if (lines.size() == 0 ){
