@@ -10,8 +10,9 @@ public class Main {
     public static Tree<String> sTree;
     public static void main(String[] args) {
 
-        //String wayToFile = "C:\\Users\\Veiber\\IdeaProjects\\sAnalysis\\test\\ListLexem4.txt";
-        String wayToFile = "C:\\Users\\Лавр\\Documents\\GitHub\\sAnalysis\\test\\ListLexem4.txt";
+        String wayToFile = "C:\\Users\\Юлия\\Desktop\\ConsoleApplication1\\ConsoleApplication1\\bin\\Release\\ListLexems.txt";
+        //String wayToFile = "test\\FINAL.txt";
+
         try (FileInputStream fin = new FileInputStream(wayToFile)){
 
             ArrayList<TokenParser> allTokens = new ArrayList<TokenParser>();
@@ -43,11 +44,11 @@ public class Main {
                             //obj.print();
 
                             dataForSemantAnList.add(q, obj);
-                            System.out.println(dataForSemantAnList.get(q).getVarName() + " " +
-                                    dataForSemantAnList.get(q).getVarType()
-                                    + " " +
-                                    dataForSemantAnList.get(q).getDeclaration().toString() + " " +
-                                    dataForSemantAnList.get(q).getInitialization().toString());
+//                            System.out.println(dataForSemantAnList.get(q).getVarName() + " " +
+//                                    dataForSemantAnList.get(q).getVarType()
+//                                    + " " +
+//                                    dataForSemantAnList.get(q).getDeclaration().toString() + " " +
+//                                    dataForSemantAnList.get(q).getInitialization().toString());
                             q++;
                         }
                         i++;
@@ -58,19 +59,23 @@ public class Main {
                 if (allTokens.get(0).getTokenName().equals("PROGRAM")){
                     sTree = new Tree<>(allTokens.get(0).getTokenName());
                     Pascal.init(sTree, allTokens);
+                    //Semantic analyser
+                    System.out.println(sTree.printTree(2));
+                    SemanticAnalyser analyser = new SemanticAnalyser();
+                    analyser.analyse(dataForSemantAnList, sTree, allTokens);
+
+                    System.out.println(sTree.toString());
+                    System.out.println("-------------------------------------------------------------------------------");
+                    Tree tree = Optimizator.optimizator(sTree, dataForSemantAnList);
+                    System.out.println(tree.toString());
+                } else {
+                    System.out.println("main: Expected keyword PROGRAM in line 1");
+                    System.exit(1);
                 }
-
-//Semantic analyse
-                SemanticAnalyser analyser = new SemanticAnalyser();
-                analyser.analyse(dataForSemantAnList, sTree, allTokens);
-
-                System.out.println(sTree.toString());
-                System.out.println("-------------------------------------------------------------------------------");
-                Tree tree = Optimizator.optimizator(sTree, dataForSemantAnList);
-                System.out.println(tree.toString());
             }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
 
-        } catch (IOException ex) { System.out.println(ex.getMessage()); }
-
+        }
     }
 }
