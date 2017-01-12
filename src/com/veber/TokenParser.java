@@ -62,11 +62,11 @@ public class TokenParser {
             case "Variable":
                 _tree.addLeaf(inputTokens.get(index).getTokenName());
                 index++;
-                System.out.println(_tree.printTree(index));
+                //System.out.println(_tree.printTree(index));
                 if (inputTokens.get(index).getTokenType().equals("End")){
                     _tree.addLeaf(inputTokens.get(index).getTokenName());
                     index++;
-                    System.out.println(_tree.printTree(index));
+                    //System.out.println(_tree.printTree(index));
                     progBlock(inputTokens, _tree);
                 } else {
                     System.out.println("identProg : expected End sign ( ; ) in line - " +
@@ -96,7 +96,7 @@ public class TokenParser {
     private static void area_var_dec(ArrayList<TokenParser> inputTokens, Tree<String> _tree){
         _tree.addLeaf(inputTokens.get(index).getTokenName());
         index++;
-        System.out.println(_tree.printTree(index));
+        //System.out.println(_tree.printTree(index));
         //----- Здесь надо модифицировать while чтобы не было ошибки
         // ----- если begin'a с проге нет вообще -----
         while (!(inputTokens.get(index).getTokenName().equals("BEGIN")) && inputTokens.size()>=index){
@@ -105,7 +105,7 @@ public class TokenParser {
                 if (inputTokens.get(index).getTokenType().equals("End")){
                     _tree.addLeaf(inputTokens.get(index).getTokenName());
                     index++;
-                    System.out.println(_tree.printTree(index));
+                    //System.out.println(_tree.printTree(index));
                 } else {
                     System.out.println("area_var_dec : expected End sign ( ; ) in line - " +
                             inputTokens.get(index).getLine());
@@ -139,7 +139,7 @@ public class TokenParser {
 
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
-            System.out.println(_tree.printTree(index));
+            //System.out.println(_tree.printTree(index));
 
             switch (inputTokens.get(index).getTokenName()){
                 case "INTEGER":
@@ -148,7 +148,7 @@ public class TokenParser {
                 case "REAL":
                     _tree.addLeaf(inputTokens.get(index).getTokenName());
                     index++;
-                    System.out.println(_tree.printTree(index));
+                    //System.out.println(_tree.printTree(index));
                     break;
                 default:
                     System.out.println("var_dec : expected TYPENAME : INT or BOOLEAN or STRING or REAL in line - " +
@@ -166,7 +166,7 @@ public class TokenParser {
 
         _tree.addLeaf(inputTokens.get(index).getTokenName());
         index++;
-        System.out.println(_tree.printTree(index));
+        //System.out.println(_tree.printTree(index));
 
         if (inputTokens.get(index).getTokenName().equals(",") &&
                 inputTokens.get(index+1).getTokenType().equals("Variable")) {
@@ -279,21 +279,21 @@ public class TokenParser {
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
             _countBEGINEND--;
-            System.out.println(_tree.printTree(index));
+            //System.out.println(_tree.printTree(index));
 
         } else if (inputTokens.get(index).getTokenName().equals(";")) {
 
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
             _countBEGINEND--; //??????
-            System.out.println(_tree.printTree(index));
+            //System.out.println(_tree.printTree(index));
 
             } else if (inputTokens.get(index).getTokenName().equals("END") &&
                 inputTokens.get(index+1).getTokenName().equals("ELSE")) {
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
             _countBEGINEND--;
-            System.out.println(_tree.printTree(index));
+            //System.out.println(_tree.printTree(index));
             //break;
         } else  {
             System.out.println("operator_END : expected END statement in line - " +
@@ -309,7 +309,7 @@ public class TokenParser {
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
             _countBEGINEND--;
-            System.out.println(_tree.printTree(index));
+            //System.out.println(_tree.printTree(index));
 
         } else {
             System.out.println("operator_END : expected END. in line - " +
@@ -328,7 +328,7 @@ public class TokenParser {
 
         _tree.addLeaf(inputTokens.get(index).getTokenName());
         index++;
-        System.out.println(_tree.printTree(index));
+        //System.out.println(_tree.printTree(index));
 
         String cur_token_name = inputTokens.get(index).getTokenName();
         String cur_token_type = inputTokens.get(index).getTokenType();
@@ -378,7 +378,7 @@ public class TokenParser {
 
                     _tree.addLeaf(inputTokens.get(index).getTokenName());
                     index++;
-                    System.out.println(_tree.printTree(index));
+                    //System.out.println(_tree.printTree(index));
 
                     if (_countBrackets != 0) {
                         System.out.println("expression : something wrong with brackets in line " +
@@ -403,14 +403,14 @@ public class TokenParser {
         if (cur_token_name.equals(";") && !inputTokens.get(index+1).getTokenName().equals("ELSE")){
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
-            System.out.println(_tree.printTree(index));
+            //System.out.println(_tree.printTree(index));
         } else if (cur_token_name.equals("END") && inputTokens.get(index+1).getTokenName().equals("ELSE")) {
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
             if (cur_token_name.equals("END")) {
                 _countBEGINEND--;
             }
-            System.out.println(_tree.printTree(index));
+            //System.out.println(_tree.printTree(index));
         }
     }
 
@@ -472,7 +472,7 @@ public class TokenParser {
 
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
-            System.out.println(_tree.printTree(index));
+            //System.out.println(_tree.printTree(index));
 
             token_name = inputTokens.get(index).getTokenName();
             token_type = inputTokens.get(index).getTokenType();
@@ -508,7 +508,7 @@ public class TokenParser {
             index++;
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
-            System.out.println(_tree.printTree(index));
+            //System.out.println(_tree.printTree(index));
             token_name = inputTokens.get(index).getTokenName();
             token_type = inputTokens.get(index).getTokenType();
         } //-----END WHILE -----
@@ -550,7 +550,7 @@ public class TokenParser {
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
             token_name = inputTokens.get(index).getTokenName();
-            System.out.println(_tree.printTree(index));
+            //System.out.println(_tree.printTree(index));
         }
     }
 
@@ -567,7 +567,7 @@ public class TokenParser {
 
                 _tree.addLeaf(inputTokens.get(index).getTokenName());
                 index++;
-                System.out.println(_tree.printTree(index));
+                //System.out.println(_tree.printTree(index));
 
                 break;
             default:
@@ -576,7 +576,7 @@ public class TokenParser {
 
                         _tree.addLeaf(inputTokens.get(index).getTokenName());
                         index++;
-                        System.out.println(_tree.printTree(index));
+                        //System.out.println(_tree.printTree(index));
                         _countBrackets++;
 
                         token_name = inputTokens.get(index).getTokenName();
@@ -596,7 +596,7 @@ public class TokenParser {
 
                                     _tree.addLeaf(inputTokens.get(index).getTokenName());
                                     index++;
-                                    System.out.println(_tree.printTree(index));
+                                    //System.out.println(_tree.printTree(index));
                                     _countBrackets--;
 
                                 } else {
@@ -611,7 +611,7 @@ public class TokenParser {
 
                         _tree.addLeaf(inputTokens.get(index).getTokenName());
                         index++;
-                        System.out.println(_tree.printTree(index));
+                        //System.out.println(_tree.printTree(index));
 
                         token_name = inputTokens.get(index).getTokenName();
                         token_type = inputTokens.get(index).getTokenType();
@@ -632,7 +632,7 @@ public class TokenParser {
 
         _tree.addLeaf(inputTokens.get(index).getTokenName());
         index++;
-        System.out.println(_tree.printTree(index));
+        //System.out.println(_tree.printTree(index));
 
         String token_name = inputTokens.get(index).getTokenName();
         String token_type = inputTokens.get(index).getTokenType();
@@ -722,7 +722,7 @@ public class TokenParser {
                     !inputTokens.get(index-1).getTokenName().equals(";")) {
                 _tree.addLeaf(inputTokens.get(index).getTokenName());
                 index++;
-                _tree.printTree(index);
+                //_tree.printTree(index);
                 if (inputTokens.get(index).getTokenName().equals("BEGIN") ||
                         inputTokens.get(index).getTokenType().equals("Variable")) {
 
@@ -786,7 +786,7 @@ public class TokenParser {
 //----- проверено наличие WHILE ------
         _tree.addLeaf(inputTokens.get(index).getTokenName());
         index++;
-        System.out.println(_tree.printTree(index));
+        //System.out.println(_tree.printTree(index));
 // ----- WHILE добавлен -----
 
         String token_name = inputTokens.get(index).getTokenName();
@@ -803,7 +803,7 @@ public class TokenParser {
 
             _tree.addLeaf(inputTokens.get(index).getTokenName());
             index++;
-            System.out.println(_tree.printTree(index));
+            //System.out.println(_tree.printTree(index));
 
 // ----- we add DO in our tree -----
             token_name = inputTokens.get(index).getTokenName();
@@ -885,7 +885,7 @@ public class TokenParser {
                 _tree.addLeaf(inputTokens.get(index).getTokenName());
                 index++;
             }
-            System.out.println(_tree.printTree(index));
+            //System.out.println(_tree.printTree(index));
 
 // ----- пытаем составной/простой оператор -----
             token_name = inputTokens.get(index).getTokenName();

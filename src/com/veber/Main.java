@@ -11,6 +11,7 @@ public class Main {
     public static void main(String[] args) {
 
         String wayToFile = "C:\\Users\\Юлия\\Desktop\\ConsoleApplication1\\ConsoleApplication1\\bin\\Release\\ListLexems.txt";
+        //String wayToFile = "test\\FINAL.txt";
         try (FileInputStream fin = new FileInputStream(wayToFile)){
 
             ArrayList<TokenParser> allTokens = new ArrayList<TokenParser>();
@@ -42,11 +43,11 @@ public class Main {
                             //obj.print();
 
                             dataForSemantAnList.add(q, obj);
-                            System.out.println(dataForSemantAnList.get(q).getVarName() + " " +
-                                    dataForSemantAnList.get(q).getVarType()
-                                    + " " +
-                                    dataForSemantAnList.get(q).getDeclaration().toString() + " " +
-                                    dataForSemantAnList.get(q).getInitialization().toString());
+//                            System.out.println(dataForSemantAnList.get(q).getVarName() + " " +
+//                                    dataForSemantAnList.get(q).getVarType()
+//                                    + " " +
+//                                    dataForSemantAnList.get(q).getDeclaration().toString() + " " +
+//                                    dataForSemantAnList.get(q).getInitialization().toString());
                             q++;
                         }
                         i++;
