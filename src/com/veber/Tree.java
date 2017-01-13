@@ -3,6 +3,7 @@ package com.veber;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by Veiber on 23.10.2016.
@@ -13,14 +14,10 @@ public class Tree<T> {
     private Tree<T> parent = null;
     private HashMap<T, Tree<T>> locate = new HashMap<T, Tree<T>>();
 
+
     public Tree(T head) {
         this.head = head;
         locate.put(head, this);
-    }
-
-    Tree() {
-        throw new UnsupportedOperationException("Not supported yet.");
-        //To change body of generated methods, choose Tools | Templates.
     }
 
     public void addLeaf(T root, T leaf) {
@@ -40,16 +37,6 @@ public class Tree<T> {
         return t;
     }
 
-    public Tree<T> setAsParent(T parentRoot) {
-        Tree<T> t = new Tree<T>(parentRoot);
-        t.leafs.add(this);
-        this.parent = t;
-        t.locate = this.locate;
-        t.locate.put(head, this);
-        t.locate.put(parentRoot, t);
-        return t;
-    }
-
     public T getHead() {
         return head;
     }
@@ -60,6 +47,7 @@ public class Tree<T> {
     public Tree<T> getParent() {
         return parent;
     }
+
     public Collection<T> getSuccessors(T root) {
         Collection<T> successors = new ArrayList<T>();
         Tree<T> tree = getTree(root);
@@ -91,7 +79,7 @@ public class Tree<T> {
 
     private static final int indent = 2;
 
-    private String printTree(int increment) {
+    public String printTree(int increment) {
         String s = "";
         String inc = "";
         for (int i = 0; i < increment; ++i) {
@@ -103,5 +91,4 @@ public class Tree<T> {
         }
         return s;
     }
-
 }

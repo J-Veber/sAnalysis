@@ -1,6 +1,8 @@
 package com.veber;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 /**
  * Created by Veiber on 01.11.2016.
  */
@@ -9,12 +11,14 @@ public class DataForSemantAn {
     private String varType;
     private Boolean declaration;
     private Boolean initialization;
+    private int line;
 
     public DataForSemantAn() {
         varName = "";
         varType = "";
         declaration = false;
         initialization = false;
+        line = 0;
     }
 
     public void setVarName(String input){
@@ -29,7 +33,12 @@ public class DataForSemantAn {
     public void setInitialization(Boolean input){
         initialization = input;
     }
-
+    public void setLine(int input){
+        line = input;
+    }
+    public int getLine(){
+        return line;
+    }
     public String getVarName(){
         return varName;
     }
@@ -42,10 +51,7 @@ public class DataForSemantAn {
     public Boolean getInitialization(){
         return initialization;
     }
-    public void add(String name, String type){
-
-    }
     public void print(){
-        System.out.println(varName + " ; " + varType + " ; " + declaration + " ; " + initialization);
+        System.out.println(varName + " ; " + varType + " ; " + declaration + " ; " + initialization + " ; " + line);
     }
 }
