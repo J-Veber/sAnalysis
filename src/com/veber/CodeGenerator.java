@@ -16,8 +16,8 @@ public class CodeGenerator {
         String s = _tree.passByDeep(_allTokens);
 
         //Определяем файл
-        File file = new File("test\\second.txt");
-        //File file = new File("first.txt");
+        //File file = new File("test\\second.txt");
+        File file = new File("C:\\Users\\Юлия\\Desktop\\ConsoleApplication1\\ConsoleApplication1\\bin\\Release\\FINAL_PROGRAM.txt");
 
 
         try {

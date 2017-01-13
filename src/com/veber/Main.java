@@ -11,8 +11,8 @@ public class Main {
     static private boolean vasVar = false;
     public static void main(String[] args) {
 
-        //String wayToFile = "C:\\Users\\Юлия\\Desktop\\ConsoleApplication1\\ConsoleApplication1\\bin\\Release\\ListLexems.txt";
-        String wayToFile = "test\\List1.txt";
+        String wayToFile = "C:\\Users\\Юлия\\Desktop\\ConsoleApplication1\\ConsoleApplication1\\bin\\Release\\ListLexem.txt";
+        //String wayToFile = "test\\List1.txt";
 
         try (FileInputStream fin = new FileInputStream(wayToFile)){
 
