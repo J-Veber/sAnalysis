@@ -1,0 +1,327 @@
+//для генератора кода, 6 января
+
+    //печать для генератора кода (фигня какая-то короче)
+    public String printTreeGen(){
+        String s = "";
+        s = s + head;
+        for (Tree<T> child : leafs) {
+            s += "\n" + child.printTreeGen();
+        }
+        return s;
+    }
+
+    private int minElemOfArray(String[] _array){
+        int min =_array.length;
+        for(int i = 0; i != _array.length; i ++){
+            if(_array[i]!=null && i<min)
+                min = i;
+        }
+        return min;
+    };
+    private int minElemOfArrayMoreThenOne(String[] _array){
+        int min =_array.length;
+        for(int i = 0; i != _array.length; i ++){
+            if(_array[i]!=null && i<min&&i>1)
+                min = i;
+        }
+        return min;
+    };
+
+
+    //обход дерева
+    public String passByDeep(ArrayList<TokenParser> _allTokens) {
+        int counter = 0;
+        String sygn = " ";
+        String str = " ";
+        int size = _allTokens.size();
+        String strTokens = " ";
+        int i = 0;
+        int j = 0;
+        String[] StrTokensVariable = new String[size];
+        String[] StrTokensComma = new String[size];
+        String[] StrTokensEnd = new String[size];
+        String[] StrTokensString = new String[size];
+        String[] StrTokensInteger = new String[size];
+        String[] StrTokensBoolean = new String[size];
+        String[] StrTokensSymbol = new String[size];
+        String[] StrTokensBegin = new String[size];
+
+        String[] StrAll = new String[size];
+
+        while (i < size && j < size) {
+
+            String VarStrType = _allTokens.get(i).getTokenType().toString();
+            String VarStrName = _allTokens.get(i).getTokenName().toString();
+            // for (int j = 0; j<size;j++){
+
+            //создаем массив под позиции переменных
+            if (VarStrType.equals("Variable")) {
+                StrTokensVariable[j] = VarStrName;
+            }
+
+            //создаем массив под позиции запятых
+            if (VarStrType.equals("Comma")) {
+                StrTokensComma[j] = VarStrName;
+            }
+
+            //создаем массив под позиции строк
+            if (VarStrType.equals("String")) {
+                StrTokensString[j] = VarStrName;
+            }
+
+            //создаем массив под позиции эндов
+            if (VarStrType.equals("End")) {
+                StrTokensEnd[j] = VarStrName;
+            }
+
+            //создаем массив под позиции двоеточий
+            if (VarStrType.equals("Simbol")) {
+                StrTokensSymbol[j] = VarStrName;
+            }
+
+            //создаем массив под позиции целых
+            if (VarStrType.equals("Integer")) {
+                StrTokensInteger[j] = VarStrName;
+            }
+
+            //создаем массив под позиции первого бегина
+            if (VarStrType.equals("Keyword") && VarStrName.equals("BEGIN"))
+                StrTokensBegin[j] = VarStrName;
+
+            i++;
+            j++;
+
+        }
+        str = "int main(){";//+"\n";
+
+        int minForInt = minElemOfArray(StrTokensInteger);
+        int minForVar = minElemOfArray(StrTokensVariable);
+
+        int minForComma = minElemOfArray(StrTokensComma);
+        int minForStr = minElemOfArray(StrTokensString);
+        int minForBegin = minElemOfArray(StrTokensBegin);
+        int minForSym = minElemOfArray(StrTokensSymbol);
+
+        for (Tree<T> child : leafs) {
+            sygn = child.head.toString();
+            T var = child.getHead();
+
+
+            //убираем переменную с названием программы
+            if (sygn.equals(StrTokensVariable[minForVar])) {
+                if (minForVar <= 1) {
+                    sygn = "";
+                    // StrTokensVariable[minForVar]=;
+                    minForVar = minElemOfArrayMoreThenOne(StrTokensVariable);
+                }
+
+            }
+
+            //убираем первый бегин
+            if (sygn.equals(StrTokensBegin[minForBegin]) && counter < 20) {
+                sygn = "";
+            }
+
+            //вставляем запятые
+//            if (sygn.equals(StrTokensComma[minForComma]) && counter < 20)//==4)
+            //              sygn = ",";
+
+            //убираем двоеточия
+            if (sygn.equals(StrTokensSymbol[minForSym])/*&&counter<15*/)
+                sygn = "";
+
+            //вставляет end и переход на новую строку
+            if (sygn.equals(StrTokensEnd[2]) && counter == 1)
+                sygn = "" + "\n";
+
+            //перемещение названия типа переменной и самой переменной
+
+
+            switch (sygn) {
+                //начало и конец программы
+                case "BEGIN":
+                    sygn = "{ " + "\n" + " ";
+                    //str = str + sygn+"\n";
+                    break;
+                case "END":
+                    sygn = "}";// +"\n";
+                    //str = str + sygn+"\n";
+                    break;
+                case "END.":
+                    sygn = "} ";// +"\n";
+                    break;
+
+                //съедаемые слова
+                case "VAR":
+                    sygn = "";
+                    str = str + sygn;
+                    break;
+
+                //условия и циклы
+                case "IF":
+                    sygn = "if" + " (";
+                    break;
+                case "THEN":
+                    sygn = ")" + "\n";
+                    break;
+                case "ELSE":
+                    sygn = " else ";
+                    break;
+
+
+                case "FOR":
+
+                    //String varI = "";
+                    // varI = child.getSuccessors(var).toString();
+                    sygn = "for (";//+ varI;
+                    break;
+                case "TO":
+                    sygn = ", " + StrTokensVariable[minForVar] + "< ";
+                    break;
+                case "DO":
+                    sygn = ", " + StrTokensVariable[minForVar] + "++) " + "\n";
+                    break;
+
+                case "WHILE":
+                    sygn = "while (";
+                    break;
+
+                // переменные
+                case "INTEGER":
+                    sygn = " int ";
+                    break;
+                case "BOOLEAN":
+                    sygn = "bool";
+                    break;
+                case "STRING":
+                    sygn = "string";
+                    break;
+
+                //знаки
+                case ":=":
+                    sygn = " = ";
+                    break;
+                case ";":
+                    sygn = ";" + "\n";
+                    break;
+                case "=":
+                    sygn = "==";
+                    break;
+                case "<=":
+                    sygn = "<=";
+                    break;
+                case ">=":
+                    sygn = ">=";
+                    break;
+                case "<>":
+                    sygn = "!=";
+                    break;
+
+            }
+            StrAll[counter] = sygn;
+            //str = str+StrAll[counter];
+
+
+            counter++;
+        }
+
+        int count = 0;
+        int markForString=0;
+
+
+        for (count = 0; count < counter; count++) {
+            if (StrAll[count] == " int ") {
+                StrAll[2] = "int ";
+                StrAll[count] = "";
+                markForString=count+2;
+            }
+            if (StrAll[count] == "string")
+            {
+                StrAll[markForString]="string "+StrAll[markForString];
+                StrAll[count]="";
+
+            }
+
+
+
+        }
+
+
+
+        for (count =0; count<counter-2; count++)
+            if (StrAll[count].contains("\n"))
+                StrAll[count+1]=" "+StrAll[count+1];
+
+        for (count =0; count<counter-3; count++)
+            if (StrAll[count]==" else "){
+                int countElse=count;
+                for (count = countElse; count<counter-4; count++)
+                    if (StrAll[count].contains("\n"))
+                        StrAll[count+1]=" "+StrAll[count+1];
+            }
+
+        for (count =0; count<counter-3; count++)
+            if (StrAll[count].contains("while")){
+                int countWhile=count+7;
+                for (count = countWhile; count<counter-6; count++)
+                    if (StrAll[count].contains("\n")) {
+                        StrAll[count + 1] = " " + StrAll[count + 1];
+                        for (count =0; count<counter-3; count++)
+                            if (StrAll[count].contains("if")){
+                                // int countIf=count;
+                                for (count = countWhile; count<counter-4; count++)
+                                    if (StrAll[count].contains("\n"))
+                                        StrAll[count+1]=" "+StrAll[count+1];
+                            }
+                    }
+            }
+
+        for (count =0; count<counter-3; count++)
+            if (StrAll[count].contains("if")){
+                int countIf=count;
+                for (count = countIf; count<counter-4; count++)
+                    if (StrAll[count].contains("\n"))
+                        StrAll[count+1]=" "+StrAll[count+1];
+            }
+
+        for (count =0; count<counter-3; count++)
+            if (StrAll[count].contains("if")){
+                int countFor=count;
+                for (count = countFor; count<counter-4; count++)
+                    if (StrAll[count].contains("\n")) {
+                        StrAll[count + 1] = " " + StrAll[count + 1];
+                        for (count =0; count<counter-3; count++)
+                            if (StrAll[count].contains("if")){
+                                // int countIf=count;
+                                for (count = countFor; count<counter-4; count++)
+                                    if (StrAll[count].contains("\n"))
+                                        StrAll[count+1]=" "+StrAll[count+1];
+                            }
+                    }
+            }
+
+        for (count =0; count<counter; count++)
+            str = str + StrAll[count];
+
+       /* //меняем местами названия переменных
+        int indexStringBeg = str.indexOf("string");
+        int indexStringEnd = str.lastIndexOf("string");
+        String subStrString = str.substring(indexStringBeg, indexStringEnd);
+        //int indexRepString = str.indexOf()
+
+
+
+        int indexIntBeg = str.indexOf(" int ");
+        int indexIntEnd = str.lastIndexOf(" int ");
+        String subStrInt = str.substring(indexIntBeg, indexIntEnd);
+        String repIntStr = subStrInt + StrTokensVariable[minForVar];
+        str.replace(StrTokensVariable[minForVar], repIntStr);
+        //str.replace(repIntStr, StrTokensVariable[minForVar]);
+
+*/
+
+
+
+
+        return str;
+    }

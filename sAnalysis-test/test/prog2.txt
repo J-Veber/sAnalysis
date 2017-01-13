@@ -1,0 +1,34 @@
+PROGRAM MMM;
+VAR i:INTEGER;
+s1,s2, x:STRING;
+BEGIN
+IF i!=4 THEN
+    BEGIN
+
+        x:=1.5;
+    END
+ELSE
+  BEGIN
+
+  i:=0;
+  WHILE i<=x DO
+      BEGIN
+        FOR i:=0 TO 4
+            BEGIN
+                IF i==4 THEN
+                    BEGIN
+
+                        u:=1.5;
+                        s1:="";
+                    END;
+                s2:=s2+s1;
+                i := ((14 + "mamma") + 7);
+            END;
+            IF u==4 THEN s1:="";
+        i := i+1;
+      END;
+
+
+
+  END;
+END.

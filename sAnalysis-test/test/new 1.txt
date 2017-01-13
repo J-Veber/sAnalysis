@@ -1,0 +1,33 @@
+
+            /*
+            if (sygn.equals(StrTokensVariable[minForVar])){
+                sygn="";
+            }
+*/
+            
+
+
+            /*if (sygn.equals(StrTokensVariable[minForVar]) && counter < 10){
+                sygn=/*StrTokensString[minForStr] + " " + StrTokensVariable[minForVar];//+ ", " + StrTokensVariable[6];
+            }*/
+
+            //пока ничего не делает
+            if (sygn.equals(StrTokensVariable[6])&&counter<20)//==5)
+                sygn="";
+
+            //передвигаем название типа - String
+            if (sygn.equals(StrTokensString[minForStr])&&counter<20) {//==7)
+                sygn = "string";
+                str.replace("s1", sygn);
+
+            }
+           // if (sygn.equals(StrTokensVariable[10])&&counter ==9)
+             //   sygn="int i";
+
+            //пока ничего не делает
+            if (sygn.equals(StrTokensSymbol[7])&&counter<20)//==10)
+                sygn="";
+
+            //передвигаем название типа Integer
+            if (sygn.equals(StrTokensInteger[minForInt]))
+                sygn="";
