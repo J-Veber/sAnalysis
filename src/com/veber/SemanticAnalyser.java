@@ -121,8 +121,8 @@ public class SemanticAnalyser {
                         }
                 }
             } else {
-                //analyse_table(_variableList, _tree, _allTokens);
-                //search_double_variable(_variableList, _tree, _allTokens);
+                analyse_table(_variableList, _tree, _allTokens);
+                search_double_variable(_variableList, _tree, _allTokens);
                 switch (child){
                     case ":=":
                         //index++;
