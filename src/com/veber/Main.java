@@ -8,10 +8,11 @@ import java.util.*;
 
 public class Main {
     public static Tree<String> sTree;
+    static private boolean vasVar = false;
     public static void main(String[] args) {
 
-        String wayToFile = "C:\\Users\\Юлия\\Desktop\\ConsoleApplication1\\ConsoleApplication1\\bin\\Release\\ListLexems.txt";
-        //String wayToFile = "test\\FINAL.txt";
+        //String wayToFile = "C:\\Users\\Юлия\\Desktop\\ConsoleApplication1\\ConsoleApplication1\\bin\\Release\\ListLexems.txt";
+        String wayToFile = "test\\List1.txt";
 
         try (FileInputStream fin = new FileInputStream(wayToFile)){
 
@@ -34,7 +35,7 @@ public class Main {
                         //curObj.print();
                         allTokens.add(i, curObj);
 
-                        if (curObj.getTokenType().equals("Variable")){
+                        if (curObj.getTokenType().equals("Variable") && vasVar == false){
                             DataForSemantAn obj = new DataForSemantAn();
                             obj.setVarName(curObj.getTokenName());
                             obj.setLine(curObj.getLine());
@@ -44,12 +45,14 @@ public class Main {
                             //obj.print();
 
                             dataForSemantAnList.add(q, obj);
-//                            System.out.println(dataForSemantAnList.get(q).getVarName() + " " +
-//                                    dataForSemantAnList.get(q).getVarType()
-//                                    + " " +
-//                                    dataForSemantAnList.get(q).getDeclaration().toString() + " " +
-//                                    dataForSemantAnList.get(q).getInitialization().toString());
+                            System.out.println(dataForSemantAnList.get(q).getVarName() + " " +
+                                    dataForSemantAnList.get(q).getVarType()
+                                    + " " +
+                                    dataForSemantAnList.get(q).getDeclaration().toString() + " " +
+                                    dataForSemantAnList.get(q).getInitialization().toString());
                             q++;
+                        } else if (curObj.getTokenName().equals("BEGIN")) {
+                            vasVar = true;
                         }
                         i++;
                     }
@@ -60,14 +63,19 @@ public class Main {
                     sTree = new Tree<>(allTokens.get(0).getTokenName());
                     Pascal.init(sTree, allTokens);
                     //Semantic analyser
-                    System.out.println(sTree.printTree(2));
+                    //System.out.println(sTree.printTree(2));
                     SemanticAnalyser analyser = new SemanticAnalyser();
                     analyser.analyse(dataForSemantAnList, sTree, allTokens);
 
+                    //Optimization
                     System.out.println(sTree.toString());
                     System.out.println("-------------------------------------------------------------------------------");
                     Tree tree = Optimizator.optimizator(sTree, dataForSemantAnList);
                     System.out.println(tree.toString());
+
+                    //CodeGenerator
+                    CodeGenerator codeGenerator = new CodeGenerator();
+                    codeGenerator.generate(tree, allTokens);
                 } else {
                     System.out.println("main: Expected keyword PROGRAM in line 1");
                     System.exit(1);

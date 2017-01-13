@@ -11,6 +11,7 @@ public class SemanticAnalyser {
     private static int variableIndex; //двигаемся по массиву variableMas
     private static int index; //двигаемся по листьям дерева
     private static int variablecount = 0;
+    private static boolean oncevar = false;
     public SemanticAnalyser(){
         index = 0;
         variableIndex = 0;
@@ -46,7 +47,6 @@ public class SemanticAnalyser {
                         ArrayList<TokenParser> _allTokens){
         Boolean Var = true;
         DataForSemantAn obj = new DataForSemantAn();
-
         for (String child : _tree.getSuccessors(_allTokens.get(index).getTokenName())) {
             if (Var){
                 switch (child){
@@ -121,8 +121,13 @@ public class SemanticAnalyser {
                         }
                 }
             } else {
-                analyse_table(_variableList, _tree, _allTokens);
-                search_double_variable(_variableList, _tree, _allTokens);
+
+                if (oncevar = false) {
+                    analyse_table(_variableList, _tree, _allTokens);
+                    search_double_variable(_variableList, _tree, _allTokens);
+                    oncevar = true;
+                }
+
                 switch (child){
                     case ":=":
                         //index++;
@@ -130,6 +135,7 @@ public class SemanticAnalyser {
 
                             int indexInVariableMas = search(_variableList, _allTokens.get(index-1).getTokenName());
                             String left_part = _variableList.get(indexInVariableMas).getVarType().toUpperCase();
+                            _variableList.get(indexInVariableMas).setInitialization(true);
                             String right_part;
                             int int_right_part = search(_variableList, _allTokens.get(index+1).getTokenName());
 
@@ -209,9 +215,9 @@ public class SemanticAnalyser {
                                 System.exit(1);
                             }
                         }
-                        if ((first.equals(second) && !first.equals("Unknown")) && !first.equals("BOOLEAN") &&
-                                (first.equals("REAL") && second.equals("INTEGER")) &&
-                                (first.equals("INTEGER") && second.equals("REAL")) &&
+                        if ((first.equals(second) && !first.equals("Unknown")) && !first.equals("BOOLEAN") ||
+                                (first.equals("REAL") && second.equals("INTEGER")) ||
+                                (first.equals("INTEGER") && second.equals("REAL")) ||
                                 (first.equals(second) && second.equals("STRING"))){
                         } else {
                             System.out.println("can not match types " + first + " and " + second + " in operation "
@@ -250,9 +256,9 @@ public class SemanticAnalyser {
                             System.exit(1);
                         }
 
-                        if (first.equals(second) && !first.equals("Unknown") && !first.equals("STRING") &&
-                                (!first.equals("BOOLEAN") && !second.equals("BOOLEAN")) &&
-                                (!(first.equals("STRING") && !second.equals("STRING"))) &&
+                        if (first.equals(second) && !first.equals("Unknown") && !first.equals("STRING") ||
+                                (!first.equals("BOOLEAN") && !second.equals("BOOLEAN")) ||
+                                (!(first.equals("STRING") && !second.equals("STRING"))) ||
                                 !(!first.equals("STRING") && second.equals("STRING"))){
                         } else {
                             System.out.println("can not match types " + first + " and " + second + " in operation "
